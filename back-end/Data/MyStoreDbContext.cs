@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 
 namespace back_end.Data
 {
@@ -50,6 +49,50 @@ namespace back_end.Data
                     entityType.SetTableName(tableName.Substring(6));
                 }
             }
+
+            builder.Ignore<IdentityUserLogin<string>>();
+            builder.Ignore<IdentityUserClaim<string>>();
+            builder.Ignore<IdentityUserToken<string>>();
+            builder.Ignore<IdentityRoleClaim<string>>();
+
+            builder.Entity<NguoiDung>(entity =>
+            {
+                entity.ToTable("NguoiDungs");
+                entity.Property(u => u.UserName).HasColumnName("TenDangNhap");
+                entity.Property(u => u.NormalizedUserName).HasColumnName("TenDangNhapChuanHoa");
+                entity.Property(u => u.Email).HasColumnName("Email");
+                entity.Property(u => u.NormalizedEmail).HasColumnName("EmailChuanHoa");
+                entity.Property(u => u.EmailConfirmed).HasColumnName("XacThucEmail");
+                entity.Property(u => u.PasswordHash).HasColumnName("MatKhauMaHoa");
+                entity.Property(u => u.SecurityStamp).HasColumnName("MaBaoMat");
+                entity.Property(u => u.ConcurrencyStamp).HasColumnName("MaDongBo");
+                entity.Property(u => u.PhoneNumber).HasColumnName("SoDienThoai");
+                entity.Property(u => u.PhoneNumberConfirmed).HasColumnName("XacThucSoDienThoai");
+                entity.Property(u => u.TwoFactorEnabled).HasColumnName("KichHoat2Lop");
+                entity.Property(u => u.LockoutEnd).HasColumnName("ThoiGianKhoa");
+                entity.Property(u => u.LockoutEnabled).HasColumnName("ChoPhepKhoa");
+                entity.Property(u => u.AccessFailedCount).HasColumnName("SoLanDangNhapThatBai");
+            });
+
+            builder.Entity<IdentityRole>(entity =>
+            {
+                entity.ToTable("VaiTros");
+
+                entity.Property(r => r.Id).HasColumnName("MaVaiTro");
+                entity.Property(r => r.Name).HasColumnName("TenVaiTro");
+                entity.Property(r => r.NormalizedName).HasColumnName("TenVaiTroChuanHoa");
+                entity.Property(r => r.ConcurrencyStamp).HasColumnName("MaDongBo");
+            });
+
+            builder.Entity<IdentityUserRole<string>>(entity =>
+            {
+                entity.ToTable("NguoiDungVaiTros");
+
+                entity.Property(ur => ur.UserId).HasColumnName("MaNguoiDung");
+                entity.Property(ur => ur.RoleId).HasColumnName("MaVaiTro");
+            });
+
+
 
             builder.Entity<DonHang>()
                 .HasOne(o => o.NguoiDung)
