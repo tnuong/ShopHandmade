@@ -74,7 +74,7 @@ namespace back_end.Services.Implements
 
             var revenue = orders
                 .Where(p => p.TrangThai == OrderStatus.COMPLETED || p.TrangThai == OrderStatus.DELIVERED)
-                .Sum(o => o.TongTien);
+                .Sum(o => o.TongTienSauKhuyenMai);
 
             var cost = orderItems
                 .Where(p => p.DonHang.TrangThai == OrderStatus.COMPLETED || p.DonHang.TrangThai == OrderStatus.DELIVERED)

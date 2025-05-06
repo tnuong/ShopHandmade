@@ -5,7 +5,9 @@
         public int Id { get; set; }
         public DateTime CreatedAt { get; set; }
         public int Quantity { get; set; }
-        public double TotalPrice { get; set; }
+        public double TotalPriceBeforeDiscount { get; set; }
+        public double TotalPriceAfterDiscount { get; set; }
+        public double TotalDiscount { get; set; }
         public string OrderStatus { get; set; }
         public string Title { get; set; }
         public string ThumbnailUrl { get; set; }
@@ -22,7 +24,9 @@
     {
         public int? Id { get; set; }
         public double? Price { get; set; }
-        public double? SubTotal { get; set; }
+        public double SubTotalBeforeDiscount { get; set; }
+        public double SubTotalAfterDiscount { get; set; }
+        public double SubTotalDiscount { get; set; }
         public int? Quantity { get; set; }
         public int? ProductId { get; set; }
         public string? ProductName { get; set; }

@@ -15,5 +15,6 @@
         public string Thumbnail { get; set; }
         public string ZoomImage { get; set; }
         public List<HinhAnhSanPhamResource> Images { get; set; }
+        public List<KhuyenMaiResource> Promotions { get; set; } = new List<KhuyenMaiResource>();
     }
 }

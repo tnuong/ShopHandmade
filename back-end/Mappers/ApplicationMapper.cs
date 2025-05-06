@@ -171,6 +171,21 @@ namespace back_end.Mappers
             };
         }
 
+        public KhuyenMaiResource MapToKhuyenMai(KhuyenMai khuyenMai)
+        {
+            return new KhuyenMaiResource()
+            {
+                Id = khuyenMai.MaKhuyenMai,
+                Name = khuyenMai.TenKhuyenMai,
+                Description = khuyenMai.NoiDungKhuyenMai,
+                DiscountValue = khuyenMai.GiaTriGiam,
+                FromDate = khuyenMai.NgayBatDau,
+                PromotionType = khuyenMai.LoaiKhuyenMai,
+                Status = khuyenMai.TrangThai,
+                ToDate = khuyenMai.NgayKetThuc,
+            };
+        }
+
         public async Task<LienHeNguoiDungResource> MapToUserContactResource(NguoiDung user)
         {
             return new LienHeNguoiDungResource()
@@ -292,7 +307,9 @@ namespace back_end.Mappers
                 Id = order.MaDonHang,
                 CreatedAt = order.NgayTao,
                 Note = order.GhiChu,
-                TotalPrice = order.TongTien,
+                TotalPriceAfterDiscount = order.TongTienSauKhuyenMai,
+                TotalPriceBeforeDiscount = order.TongTienTruocKhuyenMai,
+                TotalDiscount = order.TienKhuyenMai,
                 Title = title,
                 OrderStatus = order.TrangThai,
                 ThumbnailUrl = thumbnailUrl,
@@ -359,7 +376,9 @@ namespace back_end.Mappers
             {
                 Id = item?.MaCTDH,
                 Price = item?.DonGia,
-                SubTotal = item?.ThanhTien,
+                SubTotalAfterDiscount = item.ThanhTienSauKhuyenMai,
+                SubTotalBeforeDiscount = item.ThanhTienTruocKhuyenMai,
+                SubTotalDiscount = item.TienKhuyenMai,
                 Quantity = item?.SoLuong,
                 ProductId = item?.BienTheSanPham?.MaSanPham,
                 ProductName = item?.BienTheSanPham?.SanPham?.TenSanPham,

@@ -31,5 +31,6 @@ namespace back_end.Core.Models
 
         public bool TrangThaiXoa { get; set; } = false;
         public ICollection<DanhSachYeuThich> DanhSachYeuThich { get; set; }
+        public ICollection<SanPhamKhuyenMai> SanPhamKhuyenMais { get; set; }
     }
 }

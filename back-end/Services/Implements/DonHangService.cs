@@ -71,8 +71,11 @@ namespace back_end.Services.Implements
                 TrangThai = false
             };
 
-            double total = 0;
+            double totalBeforeDiscount = 0;
+            double totalAfterDiscount = 0;
+            double totalOrderDiscount = 0.0;
             order.DanhSachChiTietDonHang = new List<ChiTietDonHang>();
+
             foreach (var item in request.Items)
             {
                 BienTheSanPham? productVariant = await dbContext.BienTheSanPhams
@@ -80,20 +83,57 @@ namespace back_end.Services.Implements
                     .SingleOrDefaultAsync(p => p.MaBienTheSanPham == item.VariantId)
                         ?? throw new NotFoundException("Không tìm thấy sản phẩm");
 
+                var khuyenMais = await dbContext.SanPhamKhuyenMais
+                    .Include(km => km.KhuyenMai)
+                    .Where(km => km.MaSanPham == productVariant.MaSanPham).ToListAsync();
+
                 productVariant.SoLuongTonKho -= item.Quantity;
 
                 ChiTietDonHang orderItem = new ChiTietDonHang();
                 orderItem.MaBienTheSP = item.VariantId;
                 orderItem.SoLuong = item.Quantity;
-                orderItem.DonGia = productVariant!.SanPham!.GiaHienTai;
 
-                double subTotal = item.Quantity * productVariant.SanPham.GiaHienTai;
-                orderItem.ThanhTien = subTotal;
-                total += subTotal;
+                double discountValue = 0.0;
+                double unitPriceDiscount = productVariant!.SanPham!.GiaHienTai;
+                double totalDiscountValue = 0.0;
+              
+
+                foreach (var km in khuyenMais)
+                {
+                    if (km.KhuyenMai.NgayBatDau <= DateTime.Now && km.KhuyenMai.NgayKetThuc >= DateTime.Now && km.KhuyenMai.TrangThai == PromotionStatus.INACTIVE)
+                    {
+                        discountValue = km.KhuyenMai.GiaTriGiam;
+
+                        if (km.KhuyenMai.LoaiKhuyenMai == PromotionDiscountType.FIXED_AMOUNT)
+                        {
+                            unitPriceDiscount = productVariant.SanPham.GiaHienTai - discountValue;
+                           
+                        } else
+                        {
+                            unitPriceDiscount = productVariant.SanPham.GiaHienTai - (productVariant.SanPham.GiaHienTai * discountValue / 100);
+                        }
+
+                        totalDiscountValue += unitPriceDiscount;
+                    }
+                }
+
+                orderItem.DonGia = unitPriceDiscount;
+                var subTotalDiscount = item.Quantity * unitPriceDiscount;
+
+                orderItem.ThanhTienTruocKhuyenMai = item.Quantity * productVariant.SanPham.GiaHienTai;
+                orderItem.ThanhTienSauKhuyenMai = subTotalDiscount;
+                orderItem.TienKhuyenMai = totalDiscountValue;
+
+                totalBeforeDiscount += orderItem.ThanhTienTruocKhuyenMai;
+                totalAfterDiscount += subTotalDiscount;
+                totalOrderDiscount += totalDiscountValue;
+
                 order.DanhSachChiTietDonHang.Add(orderItem);
             }
 
-            order.TongTien = total;
+            order.TongTienTruocKhuyenMai = totalBeforeDiscount;
+            order.TongTienTruocKhuyenMai = totalAfterDiscount;
+            order.TienKhuyenMai = totalOrderDiscount;
             order.SoLuong = request.Items.Count;
 
             var savedOrder = await dbContext.DonHangs.AddAsync(order);

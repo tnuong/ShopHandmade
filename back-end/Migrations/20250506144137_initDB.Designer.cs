@@ -12,7 +12,7 @@ using back_end.Data;
 namespace back_end.Migrations
 {
     [DbContext(typeof(MyStoreDbContext))]
-    [Migration("20250505142204_initDB")]
+    [Migration("20250506144137_initDB")]
     partial class initDB
     {
         /// <inheritdoc />
@@ -88,21 +88,21 @@ namespace back_end.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "48b9c5a9-9115-48ec-85a5-9272a5b64d6f",
+                            Id = "624a0d1a-de6b-4715-91f1-673744cb6614",
                             ConcurrencyStamp = "1",
                             Name = "ADMIN",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "3a5a6db6-0d91-43f3-9b3c-77ccdd2d98ae",
+                            Id = "8e9cc870-43d5-4ebe-8f82-564bbdc67222",
                             ConcurrencyStamp = "1",
                             Name = "CUSTOMER",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = "8f0a1de0-ccea-4a2c-80e0-34308761c58d",
+                            Id = "babd173a-83a7-4c00-8aff-25f056c52438",
                             ConcurrencyStamp = "1",
                             Name = "EMPLOYEE",
                             NormalizedName = "EMPLOYEE"
@@ -128,8 +128,8 @@ namespace back_end.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "d5eb6b65-6b79-485e-886b-ce055c67a754",
-                            RoleId = "48b9c5a9-9115-48ec-85a5-9272a5b64d6f"
+                            UserId = "c533735c-630e-4fa7-839e-f0c30fea1318",
+                            RoleId = "624a0d1a-de6b-4715-91f1-673744cb6614"
                         });
                 });
 
@@ -235,7 +235,13 @@ namespace back_end.Migrations
                     b.Property<int>("SoLuong")
                         .HasColumnType("int");
 
-                    b.Property<double>("ThanhTien")
+                    b.Property<double>("ThanhTienSauKhuyenMai")
+                        .HasColumnType("float");
+
+                    b.Property<double>("ThanhTienTruocKhuyenMai")
+                        .HasColumnType("float");
+
+                    b.Property<double>("TienKhuyenMai")
                         .HasColumnType("float");
 
                     b.HasKey("MaCTDH");
@@ -403,7 +409,16 @@ namespace back_end.Migrations
                     b.Property<int>("SoLuong")
                         .HasColumnType("int");
 
-                    b.Property<double>("TongTien")
+                    b.Property<double>("TienKhuyenMai")
+                        .HasColumnType("float");
+
+                    b.Property<double>("TongTienSauKhuyenMai")
+                        .HasColumnType("float");
+
+                    b.Property<double>("TongTienTruocKhuyenMai")
+                        .HasColumnType("float");
+
+                    b.Property<double>("TotalAmount")
                         .HasColumnType("float");
 
                     b.Property<string>("TrangThai")
@@ -517,6 +532,44 @@ namespace back_end.Migrations
                     b.HasIndex("MaSanPham");
 
                     b.ToTable("HinhAnhSanPhams");
+                });
+
+            modelBuilder.Entity("back_end.Core.Models.KhuyenMai", b =>
+                {
+                    b.Property<int>("MaKhuyenMai")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaKhuyenMai"));
+
+                    b.Property<double>("GiaTriGiam")
+                        .HasColumnType("float");
+
+                    b.Property<string>("LoaiKhuyenMai")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("NgayBatDau")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("NgayKetThuc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NoiDungKhuyenMai")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TenKhuyeMai")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TrangThai")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("MaKhuyenMai");
+
+                    b.ToTable("KhuyenMais");
                 });
 
             modelBuilder.Entity("back_end.Core.Models.KichThuoc", b =>
@@ -706,20 +759,20 @@ namespace back_end.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "d5eb6b65-6b79-485e-886b-ce055c67a754",
+                            Id = "c533735c-630e-4fa7-839e-f0c30fea1318",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f75e1f01-53dc-40fe-9957-5a5fa15b8046",
+                            ConcurrencyStamp = "147511db-7203-4371-ac50-61587541a5c5",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             HoVaTen = "Thanh Nương",
                             LockoutEnabled = false,
-                            NgayTao = new DateTime(2025, 5, 5, 21, 22, 4, 370, DateTimeKind.Local).AddTicks(4225),
+                            NgayTao = new DateTime(2025, 5, 6, 21, 41, 37, 117, DateTimeKind.Local).AddTicks(1919),
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEDypamlJuPPtKvYh1F4SFwjRDnEC1gWJP/I4Q1nYquC1E1YMLJq4pJsqWRh2lzmxKQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEPhGggd1JS2mSKdb4fHoWsfzPt5OC8tCSPuq4vQiwvQ/m+fX7eWuWA7YfFtuW7xw9w==",
                             PhoneNumber = "0123456789",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "c3ddb36b-7957-4d68-bbcd-ced75baa2dc9",
+                            SecurityStamp = "5c148be0-3cdd-45dd-bc28-d5426ca51704",
                             ThoiGianHoatDongGanDay = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             TrangThaiHoatDong = false,
                             TrangThaiKhoa = false,
@@ -893,6 +946,29 @@ namespace back_end.Migrations
                     b.HasIndex("MaNhanHieu");
 
                     b.ToTable("SanPhams");
+                });
+
+            modelBuilder.Entity("back_end.Core.Models.SanPhamKhuyenMai", b =>
+                {
+                    b.Property<int>("MaSanPhamKhuyenMai")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaSanPhamKhuyenMai"));
+
+                    b.Property<int>("MaKhuyenMai")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaSanPham")
+                        .HasColumnType("int");
+
+                    b.HasKey("MaSanPhamKhuyenMai");
+
+                    b.HasIndex("MaKhuyenMai");
+
+                    b.HasIndex("MaSanPham");
+
+                    b.ToTable("SanPhamKhuyenMais");
                 });
 
             modelBuilder.Entity("back_end.Core.Models.ThanhToan", b =>
@@ -1312,6 +1388,25 @@ namespace back_end.Migrations
                     b.Navigation("NhanHieu");
                 });
 
+            modelBuilder.Entity("back_end.Core.Models.SanPhamKhuyenMai", b =>
+                {
+                    b.HasOne("back_end.Core.Models.KhuyenMai", "KhuyenMai")
+                        .WithMany("SanPhamKhuyenMais")
+                        .HasForeignKey("MaKhuyenMai")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("back_end.Core.Models.SanPham", "SanPham")
+                        .WithMany("SanPhamKhuyenMais")
+                        .HasForeignKey("MaSanPham")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("KhuyenMai");
+
+                    b.Navigation("SanPham");
+                });
+
             modelBuilder.Entity("back_end.Core.Models.ThietBiThongBao", b =>
                 {
                     b.HasOne("back_end.Core.Models.NguoiDung", "NguoiDung")
@@ -1388,6 +1483,11 @@ namespace back_end.Migrations
                     b.Navigation("LichSuDonHang");
                 });
 
+            modelBuilder.Entity("back_end.Core.Models.KhuyenMai", b =>
+                {
+                    b.Navigation("SanPhamKhuyenMais");
+                });
+
             modelBuilder.Entity("back_end.Core.Models.KichThuoc", b =>
                 {
                     b.Navigation("ProductVariants");
@@ -1437,6 +1537,8 @@ namespace back_end.Migrations
                     b.Navigation("DanhSachDanhGia");
 
                     b.Navigation("DanhSachHinhAnh");
+
+                    b.Navigation("SanPhamKhuyenMais");
                 });
 
             modelBuilder.Entity("back_end.Core.Models.ThanhToan", b =>

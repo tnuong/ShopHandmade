@@ -26,8 +26,17 @@ export const getMenuItemsByRoles = (roles: string[]): MenuItem[] => {
     if (isAdmin || isEmployee) {
         const children: MenuItem[] = [];
 
+        if (isAdmin || isEmployee) {
+            children.push(
+                { key: "6", label: <Link to="/admin/product">Sản phẩm</Link> },
+                { key: "8", label: <Link to="/admin/order">Đơn hàng</Link> }
+            );
+        }
+
+
         if (isAdmin) {
             children.push(
+                { key: "1", label: <Link to="/admin/promotion">Khuyến mại</Link> },
                 { key: "2", label: <Link to="/admin/manufacturer">Nhà sản xuất</Link> },
                 { key: "3", label: <Link to="/admin/supplier">Nhà cung cấp</Link> },
                 { key: "4", label: <Link to="/admin/category">Danh mục</Link> },
@@ -37,13 +46,7 @@ export const getMenuItemsByRoles = (roles: string[]): MenuItem[] => {
             );
         }
 
-        if (isAdmin || isEmployee) {
-            children.push(
-                { key: "6", label: <Link to="/admin/product">Sản phẩm</Link> },
-                { key: "8", label: <Link to="/admin/order">Đơn hàng</Link> }
-            );
-        }
-
+      
         items.push({
             key: "sub2",
             label: "Quản lí",

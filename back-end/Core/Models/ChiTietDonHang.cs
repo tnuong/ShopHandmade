@@ -9,7 +9,9 @@ namespace back_end.Core.Models
         public int MaCTDH { get; set; }
         public double DonGia { get; set; }
         public int SoLuong { get; set; }
-        public double ThanhTien { get; set; }
+        public double TienKhuyenMai { get; set; }
+        public double ThanhTienTruocKhuyenMai { get; set; }
+        public double ThanhTienSauKhuyenMai { get; set; }
 
         [ForeignKey(nameof(DonHang))]
         public int MaDonHang { get; set; }

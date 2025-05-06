@@ -18,6 +18,8 @@ namespace back_end.Data
         public DbSet<BienTheSanPham> BienTheSanPhams { get; set; }
         public DbSet<HinhAnhBienTheSanPham> HinhAnhBienTheSanPhams { get; set; }
         public DbSet<DanhMuc> DanhMucs { get; set; }
+        public DbSet<KhuyenMai> KhuyenMais { get; set; }    
+        public DbSet<SanPhamKhuyenMai> SanPhamKhuyenMais { get; set; }
         public DbSet<MauSac> MauSacs { get; set; }
         public DbSet<KichThuoc> KichThuocs { get; set; }
         public DbSet<NhanHieu> NhanHieus { get; set; }

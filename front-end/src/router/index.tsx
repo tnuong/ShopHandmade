@@ -43,6 +43,7 @@ import AuthGuard from "./auth-guard";
 import RoleBasedGuard from "./role-based-guard";
 import ManufacturerManagement from "../areas/admin/pages/ManufacturerManagement";
 import SupplierManagement from "../areas/admin/pages/SupplierManagement";
+import PromotionManagement from "../areas/admin/pages/promotions/PromotionManagement";
 
 const router = createBrowserRouter([
     {
@@ -165,6 +166,10 @@ const router = createBrowserRouter([
             {
                 path: 'category',
                 element:  <RoleBasedGuard accessibleRoles={['ADMIN']} element={<CategoryManagement />} />,
+            },
+            {
+                path: 'promotion',
+                element:  <RoleBasedGuard accessibleRoles={['ADMIN']} element={<PromotionManagement />} />,
             },
             {
                 path: 'brand',

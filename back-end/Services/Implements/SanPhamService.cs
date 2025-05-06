@@ -1,4 +1,4 @@
-﻿using Azure.Core;
+﻿using back_end.Core.Constants;
 using back_end.Core.Models;
 using back_end.Core.Requests;
 using back_end.Core.Responses;
@@ -165,12 +165,25 @@ namespace back_end.Services.Implements
                 .Take(pageSize)
                 .ToListAsync();
 
+            var resources = new List<SanPhamResource>();
+            foreach (var product in products) {
+                var promotions = await dbContext.SanPhamKhuyenMais
+                    .Include(p => p.KhuyenMai)
+                    .Where(p => p.MaSanPham == product.MaSanPham && p.KhuyenMai.TrangThai == PromotionStatus.ACTIVE && p.KhuyenMai.NgayKetThuc <= DateTime.Now.Date)
+                    .ToListAsync();
+
+                var promotionResources = promotions.Select(p => applicationMapper.MapToKhuyenMai(p.KhuyenMai)).ToList();
+                var productResource = applicationMapper.MapToProductResource(product);
+                productResource.Promotions = promotionResources;
+                resources.Add(productResource);
+            }
+
             var response = new PaginationResponse<List<SanPhamResource>>
             {
                 Success = true,
                 Message = "Lấy danh sách sản phẩm thành công",
                 StatusCode = System.Net.HttpStatusCode.OK,
-                Data = products.Select(p => applicationMapper.MapToProductResource(p)).ToList(),
+                Data = resources,
                 Pagination = new Pagination
                 {
                     TotalItems = totalItems,
@@ -336,7 +349,7 @@ namespace back_end.Services.Implements
 
         public async Task<BaseResponse> GetBestSellerProducts()
         {
-            var products = await dbContext.ChiTietDonHangs
+            var productQuantities = await dbContext.ChiTietDonHangs
                 .Include(o => o.BienTheSanPham)
                     .ThenInclude(o => o.SanPham)
                 .GroupBy(o => o.BienTheSanPham.SanPham)
@@ -349,8 +362,22 @@ namespace back_end.Services.Implements
                 .Take(8)
                 .ToListAsync();
 
+            var resources = new List<SanPhamResource>();
+            foreach (var productQuantity in productQuantities)
+            {
+                var promotions = await dbContext.SanPhamKhuyenMais
+                    .Include(p => p.KhuyenMai)
+                    .Where(p => p.MaSanPham == productQuantity.Product.MaSanPham && p.KhuyenMai.TrangThai == PromotionStatus.ACTIVE && p.KhuyenMai.NgayKetThuc <= DateTime.Now.Date)
+                    .ToListAsync();
+
+                var promotionResources = promotions.Select(p => applicationMapper.MapToKhuyenMai(p.KhuyenMai)).ToList();
+                var productResource = applicationMapper.MapToProductResource(productQuantity.Product);
+                productResource.Promotions = promotionResources;
+                resources.Add(productResource);
+            }
+
             var response = new DataResponse<List<SanPhamResource>>();
-            response.Data = products.Select(p => applicationMapper.MapToProductResource(p.Product)).ToList();
+            response.Data = resources;
             response.Message = "Lấy top sản phẩm bán chạy nhất thành công";
             response.StatusCode = HttpStatusCode.OK;
             response.Success = true;
@@ -360,7 +387,7 @@ namespace back_end.Services.Implements
 
         public async Task<BaseResponse> GetMostFavoriteProducts()
         {
-            var products = await dbContext.DanhGiaSanPhams
+            var productQuantities = await dbContext.DanhGiaSanPhams
                 .Include(e => e.SanPham)
                 .GroupBy(e => e.SanPham)
                 .Select(e => new
@@ -374,8 +401,22 @@ namespace back_end.Services.Implements
                 .Take(8)
                 .ToListAsync();
 
+            var resources = new List<SanPhamResource>();
+            foreach (var productQuantity in productQuantities)
+            {
+                var promotions = await dbContext.SanPhamKhuyenMais
+                    .Include(p => p.KhuyenMai)
+                    .Where(p => p.MaSanPham == productQuantity.Product.MaSanPham && p.KhuyenMai.TrangThai == PromotionStatus.ACTIVE && p.KhuyenMai.NgayKetThuc <= DateTime.Now.Date)
+                    .ToListAsync();
+
+                var promotionResources = promotions.Select(p => applicationMapper.MapToKhuyenMai(p.KhuyenMai)).ToList();
+                var productResource = applicationMapper.MapToProductResource(productQuantity.Product);
+                productResource.Promotions = promotionResources;
+                resources.Add(productResource);
+            }
+
             var response = new DataResponse<List<SanPhamResource>>();
-            response.Data = products.Select(p => applicationMapper.MapToProductResource(p.Product)).ToList();
+            response.Data = resources;
             response.Message = "Lấy top sản phẩm yêu thích nhất thành công";
             response.StatusCode = HttpStatusCode.OK;
             response.Success = true;

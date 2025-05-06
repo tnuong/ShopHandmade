@@ -40,6 +40,7 @@ namespace back_end.DI
             services.AddScoped<IBaiVietService, BaiVietService>();
             services.AddScoped<IHienThiBannerService, HienThiBannerService>();
             services.AddScoped<IHienThiDanhGiaService, HienThiDanhGiaService>();
+            services.AddScoped<IKhuyenMaiService, KhuyenMaiService>();
             services.AddScoped<IVaiTroService, VaiTroService>();
             services.AddScoped<IThongBaoService, ThongBaoService>();
 

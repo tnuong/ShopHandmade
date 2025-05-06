@@ -10,8 +10,10 @@ namespace back_end.Core.Models
         public int MaDonHang { get; set; }
 
         public DateTime NgayTao { get; set; }
-
-        public double TongTien { get; set; }
+        public double TotalAmount { get; set; }        
+        public double TienKhuyenMai { get; set; }    
+        public double TongTienSauKhuyenMai { get; set; }        
+        public double TongTienTruocKhuyenMai { get; set; }
 
         public int SoLuong { get; set; }
         public string GhiChu { get; set; }

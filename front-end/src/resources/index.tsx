@@ -106,7 +106,8 @@ export type ProductResource = {
     category: CategoryResource;
     manufacturer: ManufacturerResource;
     brand: BrandResource;
-    images: ImageResource[]
+    images: ImageResource[];
+    promotions: PromotionResource[]
 
 }
 
@@ -164,6 +165,18 @@ export type NotificationResource = {
     recipient: UserResource;
 }
 
+export type PromotionResource = {
+    id: number;
+    name: string;
+    description: string;
+    promotionType: string;
+    discountValue: number;
+    fromDate: Date; 
+    toDate: Date;
+    status: string;
+  };
+  
+
 export type UserResource = {
     id: string;
     name: string;
@@ -209,7 +222,9 @@ export type OrderResource = {
     title: string;
     thumbnailUrl: string;
     quantity: number;
-    totalPrice: number;
+    totalPriceBeforeDiscount: number;
+    totalPriceAfterDiscount: number;
+    totalDiscount: number;
     note: string;
     orderStatus: string;
     orderSteps: OrderProcessItem[]
@@ -229,7 +244,9 @@ export type OrderProcessItem = {
 export type OrderItemResource = {
     id?: number;
     price?: number;
-    subTotal?: number;
+    subTotalBeforeDiscount?: number;
+    subTotalAfterDiscount?: number;
+    subTotalDiscount?: number;
     productId?: number;
     quantity: number;
     productName?: string;
