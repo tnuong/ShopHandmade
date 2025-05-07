@@ -128,7 +128,7 @@ namespace back_end.Services.Implements
 
                 totalBeforeDiscount += orderItem.ThanhTienTruocKhuyenMai;
                 totalAfterDiscount += subTotalDiscount;
-                totalOrderDiscount += totalDiscountValue;
+                totalOrderDiscount += totalDiscountValue * item.Quantity;
                 totalQuantity += item.Quantity;
                 order.DanhSachChiTietDonHang.Add(orderItem);
             }

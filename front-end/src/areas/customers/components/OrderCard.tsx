@@ -33,9 +33,26 @@ const OrderCard: FC<OrderCardProps> = ({
                 <div className="flex gap-x-2 items-center">
                     <Image className="rounded-lg object-cover" height='80px' width='80px' src={order.thumbnailUrl} />
                     <div className="flex text-sm flex-col gap-y-2">
-                        <span className="font-semibold text-[16px]">ORDER ID: <b className="text-primary">{order.id}</b></span>
-                        <p>{order.title}</p>
-                        <p className="text-primary font-semibold">{formatCurrencyVND(order.totalPrice)}</p>
+                        {/* ORDER ID */}
+                        <span className="font-semibold text-base">
+                            ORDER ID: <span className="text-primary font-bold">{order.id}</span>
+                        </span>
+
+                        {/* Tên đơn hàng */}
+                        <p className="text-gray-800">{order.title}</p>
+
+                        {/* Giá giảm và giá gốc */}
+                        <div className="flex items-center gap-x-2">
+                            <p className="text-green-600 font-semibold">Giảm: {formatCurrencyVND(order.totalDiscount)}</p>
+                            <p className="text-red-500 font-medium line-through italic">
+                                {formatCurrencyVND(order.totalPriceBeforeDiscount)}
+                            </p>
+                        </div>
+
+                        {/* Tổng tiền sau giảm */}
+                        <p className="text-primary font-bold">
+                            Tổng tiền: {formatCurrencyVND(order.totalPriceAfterDiscount)}
+                        </p>
                     </div>
                 </div>
 
@@ -47,7 +64,7 @@ const OrderCard: FC<OrderCardProps> = ({
                 Hủy đơn
             </Button>}
 
-            {order.orderStatus === OrderStatus.DELIVERED && <Button onClick={() => onCompleted(order.id)}  size="small" type="primary">
+            {order.orderStatus === OrderStatus.DELIVERED && <Button onClick={() => onCompleted(order.id)} size="small" type="primary">
                 Đã nhận
             </Button>}
             <Button

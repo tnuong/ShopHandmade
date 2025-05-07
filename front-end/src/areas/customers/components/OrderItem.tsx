@@ -118,11 +118,16 @@ const OrderItem: FC<OrderItemProps> = ({
                     <span>{orderItem.quantity}</span>
                     <span className="text-gray-600">x</span>
                     <span>{formatCurrencyVND(orderItem.price)}</span>
+                    <span>|</span>
+                    <span className="text-gray-600 line-through">{formatCurrencyVND(orderItem.subTotalBeforeDiscount)}</span>
                 </div>
             </div>
         </div>
 
-        <span className="font-semibold text-sm text-primary">{formatCurrencyVND(orderItem.subTotal)}</span>
+        <div className="flex flex-col gap-y-1 items-start">
+        <span className="font-semibold text-sm text-primary">Giảm: {formatCurrencyVND(orderItem.subTotalDiscount)}</span>
+        <span className="font-semibold text-sm text-primary">Thành tiền: {formatCurrencyVND(orderItem.subTotalAfterDiscount)}</span>
+        </div>
 
         <Tooltip title='Đánh giá' placement="top">
             <Popover trigger='click' content={orderMoreAction} placement="bottom">

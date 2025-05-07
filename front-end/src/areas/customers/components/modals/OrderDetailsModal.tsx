@@ -91,17 +91,18 @@ const OrderDetailsModal: FC<OrderDetailsModalProps> = ({
                 </div>
                 <div className="flex col-span-12 lg:col-span-3 text-[16px] flex-col gap-y-1">
                     <div className="flex items-center justify-between">
-                        <span>Thành tiền</span>
-                        <span>{formatCurrencyVND(order?.totalPrice)}</span>
+                        <span>Tạm tính</span>
+                        <span>{formatCurrencyVND(order?.totalPriceBeforeDiscount)}</span>
                     </div>
                     <div className="flex items-center justify-between">
-                        <span>Phí ship</span>
-                        <span>0VNĐ</span>
+                        <span>Khuyến mại</span>
+                        <span>{formatCurrencyVND(order?.totalDiscount)}</span>
                     </div>
+                   
                     <Divider className="my-2" />
                     <div className="text-lg font-semibold flex items-center justify-between">
                         <span>Tổng tiền</span>
-                        <span className="text-primary">{formatCurrencyVND(order?.totalPrice)}</span>
+                        <span className="text-primary">{formatCurrencyVND(order?.totalPriceAfterDiscount)}</span>
                     </div>
                 </div>
             </div>
