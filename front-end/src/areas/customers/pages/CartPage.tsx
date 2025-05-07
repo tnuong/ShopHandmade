@@ -10,6 +10,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { formatCurrencyVND } from "../../../utils/format";
 import RequiredAuthentication from "../components/RequiredAuthentication";
 import images from "../../../assets";
+import { PromotionType } from "../../../constants/PromotionType";
 
 const CartPage: FC = () => {
     const [fixed, setFixed] = useState(false)
@@ -25,6 +26,29 @@ const CartPage: FC = () => {
         }
     }
 
+    const originalTotal = cartItems.reduce((sum, item) => {
+        return sum + item.product.price * item.quantity;
+    }, 0);
+
+    const discountedTotal = cartItems.reduce((sum, item) => {
+        let totalDiscount = 0;
+
+        if (item.product.promotions?.length) {
+            for (const promo of item.product.promotions) {
+                if (promo.promotionType === PromotionType.FIXED_AMOUNT) {
+                    totalDiscount += promo.discountValue;
+                } else if (promo.promotionType === PromotionType.PERCENTAGE) {
+                    totalDiscount += (item.product.price * promo.discountValue) / 100;
+                }
+            }
+        }
+
+        const finalPrice = Math.max(item.product.price - totalDiscount, 0);
+        return sum + finalPrice * item.quantity;
+    }, 0);
+
+    const discountAmount = Math.max(originalTotal - discountedTotal, 0);
+    
     return <div onScroll={handleScroll} className="h-screen overflow-y-auto bg-slate-50">
         <HeaderFadeIn fixed={fixed} />
         <Header />
@@ -59,19 +83,22 @@ const CartPage: FC = () => {
                         <div className="col-span-12 md:col-span-4 flex flex-col">
                             <span className="mb-3 text-lg font-semibold">Thông tin đơn giá</span>
                             <div className="flex flex-col gap-y-4 items-start p-8 rounded-2xl bg-white shadow-md">
-                                <div className="w-full text-lg flex flex-col gap-y-2">
+                                <div className="w-full text-lg flex flex-col gap-y-3">
                                     <div className="flex justify-between">
-                                        <span className="text-gray-500">Thành tiền</span>
-                                        <span className="font-semibold">{formatCurrencyVND(total)}</span>
+                                        <span className="text-gray-500">Tạm tính</span>
+                                        <span className="line-through text-gray-400">{formatCurrencyVND(originalTotal)}</span>
                                     </div>
+
                                     <div className="flex justify-between">
-                                        <span className="text-gray-500">Phí ship</span>
-                                        <span className="font-semibold">{formatCurrencyVND(0)}</span>
+                                        <span className="text-green-600 font-medium">Tiết kiệm</span>
+                                        <span className="text-green-600 font-semibold">- {formatCurrencyVND(discountAmount)}</span>
                                     </div>
+
                                     <Divider className="my-3" />
-                                    <div className="flex justify-between">
-                                        <span className="text-gray-800 font-semibold">Tổng tiền</span>
-                                        <span className="font-semibold text-primary text-2xl">{formatCurrencyVND(total)}</span>
+
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-gray-800 font-semibold text-[18px]">Tổng tiền</span>
+                                        <span className="font-bold text-primary text-2xl">{formatCurrencyVND(discountedTotal)}</span>
                                     </div>
                                 </div>
 
@@ -79,6 +106,7 @@ const CartPage: FC = () => {
                                     <Button size="large" shape="round" className="mt-2 w-full text-[16px]" type="primary">Thanh toán</Button>
                                 </RequiredAuthentication>
                             </div>
+
                         </div>
                     </div>
                     : <div className="flex flex-col items-center gap-y-8">

@@ -9,7 +9,7 @@ export type PromotionRequest = {
     description?: string;
     promotionType?: string;
     isActive?: boolean;
-    discountValue?: string;
+    discountValue?: number;
     startDate?: Date;
     endDate?: Date;
 };

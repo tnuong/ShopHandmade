@@ -10,6 +10,20 @@ const formatDateTime = (date: Date): string => {
     return date.toLocaleString('vi-VN', options).replace(',', '');
 }
 
+const formatDate = (date: Date): string => {
+    const options: Intl.DateTimeFormatOptions = {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour12: false,
+    };
+
+    // Tách riêng phần ngày và giờ để loại dấu phẩy
+    const dateStr = date.toLocaleDateString('vi-VN', options);
+
+    return `${dateStr}`;
+};
+
 const formatMonthYear = (date: Date): string => {
     const options: Intl.DateTimeFormatOptions = {
         month: 'long', 
@@ -46,4 +60,4 @@ const formatTimeTypeAgo = (date: Date): string => {
     }
 }
 
-export { formatCurrencyVND, formatDateTime, formatTimeTypeAgo, formatMonthYear }
+export { formatCurrencyVND, formatDateTime, formatDate, formatTimeTypeAgo, formatMonthYear }

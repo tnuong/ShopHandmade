@@ -53,10 +53,24 @@ namespace back_end.Controllers
             return Ok(response);
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdatePromotion([FromRoute] int id, [FromBody] PromotionRequest request)
+        {
+            var response = await khuyenMaiService.UpdatePromotion(id, request);
+            return Ok(response);
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePromotion([FromRoute] int id)
         {
             var response = await khuyenMaiService.DeletePromotion(id);
+            return Ok(response);
+        }
+
+        [HttpDelete("{productId}/{promotionId}")]
+        public async Task<IActionResult> DeleteProductPromotion([FromRoute] int productId, [FromRoute] int promotionId)
+        {
+            var response = await khuyenMaiService.DeleteProductPromotion(productId, promotionId);
             return Ok(response);
         }
     }

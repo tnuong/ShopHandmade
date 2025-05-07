@@ -169,7 +169,7 @@ namespace back_end.Services.Implements
             foreach (var product in products) {
                 var promotions = await dbContext.SanPhamKhuyenMais
                     .Include(p => p.KhuyenMai)
-                    .Where(p => p.MaSanPham == product.MaSanPham && p.KhuyenMai.TrangThai == PromotionStatus.ACTIVE && p.KhuyenMai.NgayKetThuc <= DateTime.Now.Date)
+                    .Where(p => p.MaSanPham == product.MaSanPham && p.KhuyenMai.TrangThai == PromotionStatus.ACTIVE && p.KhuyenMai.NgayKetThuc >= DateTime.Now.Date)
                     .ToListAsync();
 
                 var promotionResources = promotions.Select(p => applicationMapper.MapToKhuyenMai(p.KhuyenMai)).ToList();
@@ -206,11 +206,19 @@ namespace back_end.Services.Implements
                 .SingleOrDefaultAsync(p => p.MaSanPham == id && p.TrangThaiXoa == false)
                     ?? throw new NotFoundException("Không tìm thấy sản phẩm");
 
+            var promotions = await dbContext.SanPhamKhuyenMais
+                   .Include(p => p.KhuyenMai)
+                   .Where(p => p.MaSanPham == product.MaSanPham && p.KhuyenMai.TrangThai == PromotionStatus.ACTIVE && p.KhuyenMai.NgayKetThuc >= DateTime.Now.Date)
+                   .ToListAsync();
+
+            var resource = applicationMapper.MapToProductResource(product);
+            resource.Promotions = promotions.Select(p => applicationMapper.MapToKhuyenMai(p.KhuyenMai)).ToList();
+
             var response = new DataResponse<SanPhamResource>();
             response.Success = true;
             response.Message = "Lấy danh sách sản phẩm thành công";
             response.StatusCode = System.Net.HttpStatusCode.OK;
-            response.Data = applicationMapper.MapToProductResource(product);
+            response.Data = resource;
             return response;
 
         }
@@ -367,7 +375,7 @@ namespace back_end.Services.Implements
             {
                 var promotions = await dbContext.SanPhamKhuyenMais
                     .Include(p => p.KhuyenMai)
-                    .Where(p => p.MaSanPham == productQuantity.Product.MaSanPham && p.KhuyenMai.TrangThai == PromotionStatus.ACTIVE && p.KhuyenMai.NgayKetThuc <= DateTime.Now.Date)
+                    .Where(p => p.MaSanPham == productQuantity.Product.MaSanPham && p.KhuyenMai.TrangThai == PromotionStatus.ACTIVE && p.KhuyenMai.NgayKetThuc >= DateTime.Now.Date)
                     .ToListAsync();
 
                 var promotionResources = promotions.Select(p => applicationMapper.MapToKhuyenMai(p.KhuyenMai)).ToList();
@@ -406,7 +414,7 @@ namespace back_end.Services.Implements
             {
                 var promotions = await dbContext.SanPhamKhuyenMais
                     .Include(p => p.KhuyenMai)
-                    .Where(p => p.MaSanPham == productQuantity.Product.MaSanPham && p.KhuyenMai.TrangThai == PromotionStatus.ACTIVE && p.KhuyenMai.NgayKetThuc <= DateTime.Now.Date)
+                    .Where(p => p.MaSanPham == productQuantity.Product.MaSanPham && p.KhuyenMai.TrangThai == PromotionStatus.ACTIVE && p.KhuyenMai.NgayKetThuc >= DateTime.Now.Date)
                     .ToListAsync();
 
                 var promotionResources = promotions.Select(p => applicationMapper.MapToKhuyenMai(p.KhuyenMai)).ToList();

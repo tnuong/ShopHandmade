@@ -74,6 +74,7 @@ namespace back_end.Services.Implements
             double totalBeforeDiscount = 0;
             double totalAfterDiscount = 0;
             double totalOrderDiscount = 0.0;
+            int totalQuantity = 0;
             order.DanhSachChiTietDonHang = new List<ChiTietDonHang>();
 
             foreach (var item in request.Items)
@@ -96,45 +97,47 @@ namespace back_end.Services.Implements
                 double discountValue = 0.0;
                 double unitPriceDiscount = productVariant!.SanPham!.GiaHienTai;
                 double totalDiscountValue = 0.0;
-              
 
                 foreach (var km in khuyenMais)
                 {
-                    if (km.KhuyenMai.NgayBatDau <= DateTime.Now && km.KhuyenMai.NgayKetThuc >= DateTime.Now && km.KhuyenMai.TrangThai == PromotionStatus.INACTIVE)
+                    if (km.KhuyenMai.NgayKetThuc.Date >= DateTime.Now.Date && km.KhuyenMai.TrangThai == PromotionStatus.ACTIVE)
                     {
                         discountValue = km.KhuyenMai.GiaTriGiam;
 
                         if (km.KhuyenMai.LoaiKhuyenMai == PromotionDiscountType.FIXED_AMOUNT)
                         {
                             unitPriceDiscount = productVariant.SanPham.GiaHienTai - discountValue;
-                           
+                            totalDiscountValue += discountValue;
                         } else
                         {
                             unitPriceDiscount = productVariant.SanPham.GiaHienTai - (productVariant.SanPham.GiaHienTai * discountValue / 100);
+                            totalDiscountValue += (productVariant.SanPham.GiaHienTai * discountValue / 100);
                         }
-
-                        totalDiscountValue += unitPriceDiscount;
                     }
                 }
 
-                orderItem.DonGia = unitPriceDiscount;
+                unitPriceDiscount = unitPriceDiscount < 0 ? 0 : unitPriceDiscount;
+                totalDiscountValue = totalDiscountValue > productVariant.SanPham.GiaHienTai ? productVariant.SanPham.GiaHienTai : totalDiscountValue;
+
+                orderItem.DonGia = productVariant.SanPham.GiaHienTai;
                 var subTotalDiscount = item.Quantity * unitPriceDiscount;
 
                 orderItem.ThanhTienTruocKhuyenMai = item.Quantity * productVariant.SanPham.GiaHienTai;
                 orderItem.ThanhTienSauKhuyenMai = subTotalDiscount;
-                orderItem.TienKhuyenMai = totalDiscountValue;
+                orderItem.TienKhuyenMai = totalDiscountValue * item.Quantity;
 
                 totalBeforeDiscount += orderItem.ThanhTienTruocKhuyenMai;
                 totalAfterDiscount += subTotalDiscount;
                 totalOrderDiscount += totalDiscountValue;
-
+                totalQuantity += item.Quantity;
                 order.DanhSachChiTietDonHang.Add(orderItem);
             }
 
             order.TongTienTruocKhuyenMai = totalBeforeDiscount;
-            order.TongTienTruocKhuyenMai = totalAfterDiscount;
+            order.TongTienSauKhuyenMai = totalAfterDiscount;
             order.TienKhuyenMai = totalOrderDiscount;
-            order.SoLuong = request.Items.Count;
+
+            order.SoLuong = totalQuantity;
 
             var savedOrder = await dbContext.DonHangs.AddAsync(order);
             await dbContext.SaveChangesAsync();

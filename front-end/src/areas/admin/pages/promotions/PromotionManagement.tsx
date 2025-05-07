@@ -4,16 +4,15 @@ import type { TableProps } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import useModal from "../../../../hooks/useModal";
 import { PromotionResource } from "../../../../resources";
-import CreateBrandModal from "../../components/modals/CreateBrandModal";
-import brandService from "../../../../services/brand-service";
-import EditBrandModal from "../../components/modals/EditBrandModal";
 import TitleHeader from "../../components/TitleHeader";
 import useDebounce from "../../../../hooks/useDebounce";
 import { QueryParams } from "../products/VariantManagement";
 import promotionService from "../../../../services/promotion-service";
 import CreatePromotionModal from "../../components/modals/CreatePromotionModal";
-import { formatDateTime } from "../../../../utils/format";
+import { formatCurrencyVND, formatDate } from "../../../../utils/format";
 import { PromotionType } from "../../../../constants/PromotionType";
+import EditPromotionModal from "../../components/modals/EditPromotionModal";
+import { PromotionStatus } from "../../../../constants/PromotionStatus";
 
 const intitialValues: QueryParams = {
     pageIndex: 1,
@@ -87,18 +86,31 @@ const PromotionManagement: FC = () => {
             title: 'Giá trị giảm',
             dataIndex: 'discountValue',
             key: 'discountValue',
+            render: (value, record) => {
+                if(record.promotionType === PromotionType.FIXED_AMOUNT) {
+                    return formatCurrencyVND(value)
+                }
+
+                return <span>{value}%</span>
+            }
         },
         {
             title: 'Bắt đầu',
             dataIndex: 'fromDate',
             key: 'fromDate',
-            render: (value) => formatDateTime(new Date(value))
+            render: (value) => formatDate(new Date(value))
         },
         {
             title: 'Kết thúc',
             dataIndex: 'toDate',
             key: 'toDate',
-            render: (value) => formatDateTime(new Date(value))
+            render: (value) => formatDate(new Date(value))
+        },
+        {
+            title: 'Trạng thái',
+            dataIndex: 'status',
+            key: 'status',
+            render: (value) => value === PromotionStatus.ACTIVE ? <Tag color="green">Hoạt động</Tag> : <Tag color="red">Đẫ ngừng</Tag>
         },
         {
             title: 'Thao tác',
@@ -170,7 +182,7 @@ const PromotionManagement: FC = () => {
             onCancel={edithandleCancel}
             footer={[]}
         >
-            {/* <EditBrandModal brand={brand!} handleOk={handleSubmit} /> */}
+            <EditPromotionModal promotion={promotion!} handleOk={handleSubmit} />
         </Modal>
     </div>
 };

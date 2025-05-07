@@ -19,6 +19,7 @@ import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { Link, useNavigate } from "react-router-dom";
 import { formatCurrencyVND } from "../../../utils/format";
 import AddressRadioItem from "../components/AddressRadioItem";
+import { PromotionType } from "../../../constants/PromotionType";
 
 
 type CartItemProps = {
@@ -30,6 +31,36 @@ const CartItem: FC<CartItemProps> = ({
 }) => {
     const dispatch = useDispatch<AppDispatch>();
 
+    const [discountValue, setDiscountValue] = useState<number>(0);
+    const [priceAfterDiscount, setPriceAfterDiscount] = useState<number>(0);
+
+    useEffect(() => {
+        let totalDiscount = 0;
+
+        // Tính tổng số tiền giảm theo khuyến mãi
+        if (cartItem.product.promotions && cartItem.product.promotions.length > 0) {
+            for (const promo of cartItem.product.promotions) {
+                if (promo.promotionType === PromotionType.FIXED_AMOUNT) {
+                    totalDiscount += promo.discountValue;
+                } else if (promo.promotionType === PromotionType.PERCENTAGE) {
+                    totalDiscount += (cartItem.product.price * promo.discountValue) / 100;
+                }
+            }
+        }
+
+        // Tính tổng giá sản phẩm * số lượng
+        const totalPrice = cartItem.product.price * cartItem.quantity;
+
+        // Nếu tổng số tiền giảm * số lượng lớn hơn giá sản phẩm * số lượng, điều chỉnh số tiền giảm
+        const totalDiscountWithQuantity = totalDiscount * cartItem.quantity;
+        const adjustedDiscount = totalDiscountWithQuantity > totalPrice ? totalPrice : totalDiscountWithQuantity;
+
+        // Tính giá sau khi giảm
+        const finalPrice = Math.max(totalPrice - adjustedDiscount, 0);
+
+        setDiscountValue(adjustedDiscount);
+        setPriceAfterDiscount(finalPrice);
+    }, [cartItem]);
 
     return <div className="flex items-center justify-between">
         <div className="flex gap-x-3 items-center">
@@ -44,7 +75,22 @@ const CartItem: FC<CartItemProps> = ({
             </div>
         </div>
 
-        <p className="font-semibold text-primary text-sm">{formatCurrencyVND(cartItem.subTotal)}</p>
+        <div className="hidden lg:flex flex-col items-center text-right gap-y-1">
+            {discountValue > 0 ? (
+                <>
+                    <span className="text-primary text-[15px] font-semibold">
+                        {formatCurrencyVND(priceAfterDiscount)}
+                    </span>
+                    <span className="text-red-500 text-xs italic">
+                        Đã giảm:  -{formatCurrencyVND(discountValue)}
+                    </span>
+                </>
+            ) : (
+                <span className="text-primary font-semibold text-[15px]">
+                    {formatCurrencyVND(cartItem.product?.price * cartItem.quantity)}
+                </span>
+            )}
+        </div>
 
         <QuantityButton onDescrease={_ => dispatch(descreaseQuantity(cartItem.variant?.id))} onIncrease={_ => dispatch(increaseQuantity(cartItem.variant?.id))} size='small' defaultValue={cartItem.quantity} />
     </div>
@@ -164,6 +210,29 @@ const CheckoutPage: FC = () => {
 
     }
 
+    const originalTotal = cartItems.reduce((sum, item) => {
+        return sum + item.product.price * item.quantity;
+    }, 0);
+
+    const discountedTotal = cartItems.reduce((sum, item) => {
+        let totalDiscount = 0;
+
+        if (item.product.promotions?.length) {
+            for (const promo of item.product.promotions) {
+                if (promo.promotionType === PromotionType.FIXED_AMOUNT) {
+                    totalDiscount += promo.discountValue;
+                } else if (promo.promotionType === PromotionType.PERCENTAGE) {
+                    totalDiscount += (item.product.price * promo.discountValue) / 100;
+                }
+            }
+        }
+
+        const finalPrice = Math.max(item.product.price - totalDiscount, 0);
+        return sum + finalPrice * item.quantity;
+    }, 0);
+
+    const discountAmount = Math.max(originalTotal - discountedTotal, 0);
+
     return <div onScroll={handleScroll} className="flex flex-col h-screen overflow-y-auto bg-slate-50">
         <HeaderFadeIn fixed={fixed} />
         <Header />
@@ -251,20 +320,23 @@ const CheckoutPage: FC = () => {
                                         <Divider className="my-1" />
                                     </Fragment>)}
                                 </div>
-                                <div className="flex flex-col gap-y-1">
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-gray-400">Thành tiền</span>
-                                        <span className="text-gray-400 font-semibold">{formatCurrencyVND(total)}</span>
+                                <div className="w-full text-lg flex flex-col gap-y-3">
+                                    <div className="flex justify-between">
+                                        <span className="text-gray-500">Tạm tính</span>
+                                        <span className="line-through text-gray-400">{formatCurrencyVND(originalTotal)}</span>
                                     </div>
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-gray-400">Phí ship</span>
-                                        <span className="text-gray-400 font-semibold">{formatCurrencyVND(0)}</span>
+
+                                    <div className="flex justify-between">
+                                        <span className="text-green-600 font-medium">Tiết kiệm</span>
+                                        <span className="text-green-600 font-semibold">- {formatCurrencyVND(discountAmount)}</span>
                                     </div>
-                                </div>
-                                <Divider className="my-2" />
-                                <div className="flex items-center justify-between font-semibold">
-                                    <span className="text-gray-400">Tổng tiền</span>
-                                    <span className="text-primary">{formatCurrencyVND(total)}</span>
+
+                                    <Divider className="my-3" />
+
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-gray-800 font-semibold text-[18px]">Tổng tiền</span>
+                                        <span className="font-bold text-primary text-2xl">{formatCurrencyVND(discountedTotal)}</span>
+                                    </div>
                                 </div>
 
                                 <Divider className="my-4" />
@@ -279,10 +351,14 @@ const CheckoutPage: FC = () => {
                             onCancel={handleCancel}
                             footer={[]}
                         >
-
-                            <PayPalScriptProvider deferLoading={false} options={initialOptions}>
+                            {discountedTotal === 0 
+                            ? <div className="flex justify-center">
+                                <Button type="primary" onClick={handleCreateOrder} size="large">Đặt hàng ngay</Button>
+                            </div> 
+                            : <PayPalScriptProvider deferLoading={false} options={initialOptions}>
                                 <PaymentMethodModal onPaypalPayment={handlePaypalPayment} onVnpayPayment={handleCreateVnpayPayment} onCashPayment={handleCreateOrder} />
-                            </PayPalScriptProvider>
+                            </PayPalScriptProvider>}
+
 
                         </Modal>
                     </div>

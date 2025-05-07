@@ -16,6 +16,7 @@ import { AppDispatch } from "../../../app/store";
 import { formatCurrencyVND } from "../../../utils/format";
 import evaluationService from "../../../services/evaluation-service";
 import EvaluationSkeleton from "../../shared/skeleton/EvaluationSkeleton";
+import { PromotionType } from "../../../constants/PromotionType";
 
 type ReviewTabProps = {
     productId: number | string;
@@ -70,6 +71,70 @@ const onChange = (key: string) => {
     console.log(key);
 };
 
+type ProductImageProps = {
+    product: ProductResource;
+    selectedVariant: VariantResource | null;
+}
+
+const ProductImage: FC<ProductImageProps> = ({ product, selectedVariant }) => {
+    const hasPromotions = product?.promotions.length > 0;
+    return (
+        <div className="relative">
+            {hasPromotions && (
+                <div className="absolute top-2 left-0 flex flex-col gap-1 z-10">
+                    {product.promotions.map((promo) => (
+                        <Tooltip
+                            key={promo.id}
+                            title={`${promo.name} | Giảm ${promo.promotionType === PromotionType.FIXED_AMOUNT
+                                ? formatCurrencyVND(promo.discountValue)
+                                : `${promo.discountValue}%`
+                                }`}
+                        >
+                            <div className="relative -ml-1">
+                                <div className="bg-red-500 text-white text-sm font-semibold py-1 px-2 pr-4 rounded-br-[4px] shadow-md skew-x-[-12deg] w-max">
+                                    <span className="skew-x-[12deg] block">
+                                        Giảm{" "}
+                                        {promo.promotionType === PromotionType.FIXED_AMOUNT
+                                            ? formatCurrencyVND(promo.discountValue)
+                                            : `${promo.discountValue}%`}
+                                    </span>
+                                </div>
+                                <div className="absolute top-0 left-0 w-0 h-0 border-t-[16px] border-t-red-500 border-l-[8px] border-l-transparent"></div>
+                            </div>
+                        </Tooltip>
+                    ))}
+                </div>
+            )}
+
+            {product.quantity > 0 ? (
+                <Image
+                    preview={{
+                        mask: null
+                    }}
+                    className="rounded-3xl"
+                    width='100%'
+                    src={selectedVariant?.thumbnailUrl ?? product?.thumbnail}
+                />
+            ) : (
+                <Badge.Ribbon
+                    placement="end"
+                    text="Hết hàng"
+                    color="volcano"
+                >
+                    <Image
+                        preview={{
+                            mask: null
+                        }}
+                        className="rounded-3xl"
+                        width='100%'
+                        src={selectedVariant?.thumbnailUrl ?? product?.thumbnail}
+                    />
+                </Badge.Ribbon>
+            )}
+        </div>
+    );
+};
+
 
 const ProductPage: FC = () => {
 
@@ -81,13 +146,37 @@ const ProductPage: FC = () => {
     const [size, setSize] = useState<SizeResource | null>()
     const [count, setCount] = useState(1)
     const [selectedVariant, setSelectedVariant] = useState<VariantResource | null>(null)
-    const dispatch = useDispatch<AppDispatch>()
+    const dispatch = useDispatch<AppDispatch>();
+
+    const [discountValue, setDiscountValue] = useState<number>(0);
+    const [priceAfterDiscount, setPriceAfterDiscount] = useState<number>(0);
 
     useEffect(() => {
         const fetchProduct = async () => {
             const response = await productService.getProductById(id!);
-            setProduct(response.data)
-        }
+            const fetchedProduct = response.data;
+
+            let totalDiscount = 0;
+
+            if (fetchedProduct.promotions?.length > 0) {
+                for (const promo of fetchedProduct.promotions) {
+                    if (promo.promotionType === PromotionType.FIXED_AMOUNT) {
+                        totalDiscount += promo.discountValue;
+                    } else if (promo.promotionType === PromotionType.PERCENTAGE) {
+                        totalDiscount += (fetchedProduct.price * promo.discountValue) / 100;
+                    }
+                }
+            }
+
+            // ✅ Giới hạn giảm không vượt quá giá sản phẩm
+            totalDiscount = Math.min(totalDiscount, fetchedProduct.price);
+
+            const finalPrice = fetchedProduct.price - totalDiscount;
+
+            setDiscountValue(totalDiscount);
+            setPriceAfterDiscount(finalPrice);
+            setProduct(fetchedProduct);
+        };
 
         const fetchVariants = async () => {
             const response = await variantService.getUniqueColorVariantsByProductId(id!);
@@ -110,10 +199,10 @@ const ProductPage: FC = () => {
         const response = await variantService.getAllVariantsByProductIdAndColorId(id!, colorId);
         const responseData = response.data
 
-        if(responseData.length > 0) {
+        if (responseData.length > 0) {
             setSelectedVariant(responseData[0])
             setSize(responseData[0].size)
-        } 
+        }
 
         setUniqueSizeVariants(responseData)
         setColor(colorItem)
@@ -176,18 +265,24 @@ const ProductPage: FC = () => {
 
         <div className="grid grid-cols-12 gap-y-6 md:gap-x-10 mb-8">
             <div className="col-span-12 md:col-span-5">
-                <Image.PreviewGroup
-                    preview={{
-                        onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`),
-                    }}
-                >
-                    {product?.quantity! > 0 ? <Image className="rounded-3xl" width='100%' src={selectedVariant?.thumbnailUrl ?? product?.thumbnail} />
-                        : <Badge.Ribbon placement="end" text="Hết hàng" color="volcano">
-                            <Image className="rounded-3xl" width='100%' src={selectedVariant?.thumbnailUrl ?? product?.thumbnail} />
-                        </Badge.Ribbon>}
+                <Image.PreviewGroup>
+                    {product && <ProductImage
+                        selectedVariant={selectedVariant}
+                        product={product}
+                    />}
 
                     <div className="flex items-center gap-x-4 mt-4">
-                        {product?.images.map(image => <Image width='80px' height='80px' key={image.id} className="rounded-3xl object-cover" src={image.url} />)}
+                        {product?.images.map(image =>
+                            <Image
+                                preview={{
+                                    mask: null
+                                }}
+                                width='80px'
+                                height='80px'
+                                key={image.id}
+                                className="rounded-3xl object-cover"
+                                src={image.url}
+                            />)}
                     </div>
                 </Image.PreviewGroup>
 
@@ -203,11 +298,25 @@ const ProductPage: FC = () => {
                     <Rate className="text-sm" disabled defaultValue={4} />
                     <span className="text-gray-600 font-semibold text-sm">2.3k+ reviews</span>
                 </div>
-                <div className="flex gap-x-3 items-center">
-                    <span className="line-through text-lg">{formatCurrencyVND(product?.oldPrice)}</span>
-                    <span className="text-primary text-2xl font-semibold">{formatCurrencyVND(product?.price)}</span>
-                </div>
+                <div className="flex flex-col gap-y-1">
+                    <span className="line-through text-gray-500 text-lg">
+                        {formatCurrencyVND(product?.oldPrice ?? product?.price)}
+                    </span>
 
+                    <div className="text-primary text-3xl font-bold">
+                        {discountValue > 0
+                            ? formatCurrencyVND(priceAfterDiscount)
+                            : formatCurrencyVND(product?.price)}
+                    </div>
+
+                    {discountValue > 0 && (
+                        <div className="flex items-center gap-x-3 mt-1">
+                            <div className="text-red-600 text-sm font-medium bg-red-100 px-2 py-0.5 rounded">
+                                Đã giảm: -{formatCurrencyVND(discountValue)}
+                            </div>
+                        </div>
+                    )}
+                </div>
                 <div>
                     <span className="text-lg">Màu sắc: {color?.name}</span>
                     <GroupColorRadio
@@ -223,7 +332,7 @@ const ProductPage: FC = () => {
                         <button disabled={!color}>
                             <GroupSizeRadio
                                 value={size?.id!}
-                                defaultValue={size?.id!}    
+                                defaultValue={size?.id!}
                                 onChange={handleSizeChange}
                                 sizes={uniqueSizeVariants.map(v => v.size)}
                             />

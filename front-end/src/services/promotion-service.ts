@@ -28,6 +28,10 @@ class PromotionService {
         return axiosConfig.delete("/api/KhuyenMai/" + id);
     }
 
+    removeProductPromotion(productId: number, promotionId: number): Promise<BaseResponse> {
+        return axiosConfig.delete("/api/KhuyenMai/" + productId + '/' + promotionId);
+    }
+
     assignPromotionToProducts(promotionIds: number[], productIds: number[]) : Promise<BaseResponse> {
         return axiosConfig.post("/api/KhuyenMai/ap-dung", {
             productIds,

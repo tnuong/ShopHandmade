@@ -317,7 +317,7 @@ const CreateVariantModal: FC<CreateVariantModalProps> = ({
                         name="inStock"
                         rules={[{ required: true, message: 'Tồn kho không được để trống!' }]}
                     >
-                        <InputNumber style={{ width: '100%'}} size="large" min={0} />
+                        <InputNumber placeholder="Nhập số lượng tồn kho" style={{ width: '100%'}} size="large" min={0} />
                     </Form.Item>
 
                 </div>

@@ -12,18 +12,52 @@ import { formatCurrencyVND } from "../../../utils/format";
 import useModal from "../../../hooks/useModal";
 import QuickViewModal from "./modals/QuickViewModal";
 import images from "../../../assets";
+import { PromotionType } from "../../../constants/PromotionType";
 
 type ProductProps = {
     product: ProductResource
 }
 
-const Product: FC<ProductProps> = ({
-    product
-}) => {
-    return product.quantity > 0 ? <ProductInner product={product} />
-        : <Badge.Ribbon placement="start" text="Hết hàng" color="volcano">
-            <ProductInner product={product} />
-        </Badge.Ribbon>
+const Product: FC<ProductProps> = ({ product }) => {
+    const hasPromotions = product.promotions.length > 0;
+
+    return (
+        <div className="relative">
+            {hasPromotions && (
+                <div className="absolute top-2 left-0 flex flex-col gap-1 z-10">
+                    {product.promotions.map((promo) => (
+                        <Tooltip
+                            key={promo.id}
+                            title={`${promo.name} | Giảm ${promo.promotionType === PromotionType.FIXED_AMOUNT
+                                    ? formatCurrencyVND(promo.discountValue)
+                                    : `${promo.discountValue}%`
+                                }`}
+                        >
+                            <div className="relative -ml-1">
+                                <div className="bg-red-500 text-white text-[13px] font-semibold py-1 px-2 pr-4 rounded-br-[4px] shadow-md skew-x-[-12deg] w-max">
+                                    <span className="skew-x-[12deg] block">
+                                        Giảm{" "}
+                                        {promo.promotionType === PromotionType.FIXED_AMOUNT
+                                            ? formatCurrencyVND(promo.discountValue)
+                                            : `${promo.discountValue}%`}
+                                    </span>
+                                </div>
+                                <div className="absolute top-0 left-0 w-0 h-0 border-t-[16px] border-t-red-500 border-l-[8px] border-l-transparent"></div>
+                            </div>
+                        </Tooltip>
+                    ))}
+                </div>
+            )}
+
+            {product.quantity > 0 ? (
+                <ProductInner product={product} />
+            ) : (
+                <Badge.Ribbon placement="start" text="Hết hàng" color="volcano">
+                    <ProductInner product={product} />
+                </Badge.Ribbon>
+            )}
+        </div>
+    );
 };
 
 export default Product;

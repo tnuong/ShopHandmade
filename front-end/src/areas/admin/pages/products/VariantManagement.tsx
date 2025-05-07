@@ -47,9 +47,9 @@ const VariantManagement: FC<VariantManagementProps> = ({
         try {
             await variantService.removeVariant(id)
             fetchVariants(queryParams)
-            message.success('Xóa sản phẩm thành công');
+            message.success('Xóa biến thể sản phẩm thành công');
         } catch {
-            message.error('Xóa sản phẩm thất bại');
+            message.error('Xóa biến thể sản phẩm thất bại');
         }
     };
 
@@ -154,7 +154,7 @@ const VariantManagement: FC<VariantManagementProps> = ({
         <Modal
             open={isModalOpen}
             onOk={handleOk}
-            title={<p className="text-center font-semibold text-2xl">Thêm sản phẩm mới</p>}
+            title={<p className="text-center font-semibold text-2xl">Thêm biến thể sản phẩm mới</p>}
             onCancel={handleCancel}
             width='800px'
             footer={[]}

@@ -121,6 +121,23 @@ namespace back_end.Services.Implements
             };
         }
 
+        public async Task<BaseResponse> DeleteProductPromotion(int productId, int promotionId)
+        {
+            var productPromotion = await dbContext
+                .SanPhamKhuyenMais.SingleOrDefaultAsync(s => s.MaSanPham == productId && s.MaKhuyenMai == promotionId)
+                ?? throw new NotFoundException("Không tìm thấy thông tin khuyến mại cho sản phẩm này");
+
+            dbContext.SanPhamKhuyenMais.Remove(productPromotion);
+            await dbContext.SaveChangesAsync();
+
+            return new BaseResponse()
+            {
+                Message = "Bỏ áp dụng khuyến mãi thành công",
+                StatusCode = HttpStatusCode.OK,
+                Success = true
+            };
+        }
+
         public async Task<BaseResponse> DeletePromotion(int promotionId)
         {
             var khuyenMai = await dbContext.KhuyenMais
@@ -204,9 +221,38 @@ namespace back_end.Services.Implements
             };
         }
 
-        public Task<BaseResponse> UpdatePromotion(int promotionId, PromotionRequest request)
+        public async Task<BaseResponse> UpdatePromotion(int promotionId, PromotionRequest request)
         {
-            throw new NotImplementedException();
+
+            if (request.StartDate.Date > request.EndDate.Date)
+                throw new Exception("Ngày bắt đầu không được lớn hơn ngày kết thúc");
+
+            if (request.EndDate.Date < DateTime.Now.Date)
+                throw new Exception("Ngày kết thúc phải lớn hơn hôm nay");
+
+            if (request.PromotionType != PromotionDiscountType.PERCENTAGE && request.PromotionType != PromotionDiscountType.FIXED_AMOUNT)
+                throw new Exception("Loại khuyến mại không hợp lệ");
+
+            var khuyenMai = await dbContext.KhuyenMais
+               .SingleOrDefaultAsync(km => km.MaKhuyenMai == promotionId)
+                   ?? throw new NotFoundException("Khuyến mại không tồn tại");
+
+            khuyenMai.GiaTriGiam = request.DiscountValue;
+            khuyenMai.LoaiKhuyenMai = request.PromotionType;
+            khuyenMai.NgayBatDau = request.StartDate;
+            khuyenMai.NgayKetThuc = request.EndDate;
+            khuyenMai.NoiDungKhuyenMai = request.Description;
+            khuyenMai.TenKhuyenMai = request.Name;
+            khuyenMai.TrangThai = request.IsActive ? PromotionStatus.ACTIVE : PromotionStatus.INACTIVE;
+
+            await dbContext.SaveChangesAsync();
+
+            return new BaseResponse()
+            {
+                StatusCode = HttpStatusCode.OK,
+                Message = "Cập nhật thông tin khuyến mại thành công",
+                Success = true
+            };
         }
     }
 }

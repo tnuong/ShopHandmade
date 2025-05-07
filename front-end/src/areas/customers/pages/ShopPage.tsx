@@ -81,7 +81,7 @@ const ShopPage: FC = () => {
         fetchProducts(params)
         setTimeout(() => {
             setLoading(false)
-        }, 500)
+        }, 300)
     }, [params])
 
     return <div className="flex flex-col">

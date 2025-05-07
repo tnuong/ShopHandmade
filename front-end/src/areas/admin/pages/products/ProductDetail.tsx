@@ -1,9 +1,10 @@
-import { Button, Checkbox, Empty, GetProp, Image, Modal, Rate, Tooltip, Typography, Upload, UploadProps, message } from "antd";
+import { Button, Checkbox, Empty, GetProp, Image, Modal, Popconfirm, Rate, Tooltip, Typography, Upload, UploadProps, message } from "antd";
 import { FC, useEffect, useState } from "react";
 import ReviewAnalytic from "../../../customers/components/ReviewAnalytic";
 import Review from "../../../customers/components/Review";
 import { useParams } from "react-router-dom";
 import {
+    DeleteOutlined,
     EditOutlined
 } from '@ant-design/icons';
 import ImgCrop from 'antd-img-crop';
@@ -22,6 +23,8 @@ import ReactApexChart from "react-apexcharts";
 import { getBase64 } from "../../../../utils/file";
 import UploadButton from "../../components/UploadButton";
 import VariantManagement from "./VariantManagement";
+import { PromotionType } from "../../../../constants/PromotionType";
+import promotionService from "../../../../services/promotion-service";
 
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
@@ -140,6 +143,17 @@ const ProductDetail: FC = () => {
         message.success('Xóa các ảnh thành công')
     }
 
+    const handleRemoveProductPromotion = async (promotionId: number) => {
+        if(product == null) return;
+        const response = await promotionService.removeProductPromotion(product?.id, promotionId);
+        if (response.success) {
+            message.success('Bỏ áp dụng khuyến mãi thành công')
+            fetchProduct()
+        } else {
+            message.error(response.message)
+        }
+    }
+
 
     return <div className="grid grid-cols-12 gap-6 h-full">
         <div className="col-span-8 flex flex-col gap-y-6 relative h-full overflow-y-auto custom-scrollbar scrollbar-h-4">
@@ -190,7 +204,7 @@ const ProductDetail: FC = () => {
                         <span className="text-lg flex-1">Mô tả: </span>
                         <p className="text-lg">{product?.description}</p>
                     </div>
-                    
+
 
                     <div className="flex gap-x-3 items-center">
                         <span className="text-lg">Giá nhập: </span>
@@ -245,6 +259,24 @@ const ProductDetail: FC = () => {
             </div>
         </div>
         <div className="col-span-4 flex flex-col gap-y-6 h-full">
+            {(product?.promotions.length ?? 0) > 0 && <div className="bg-white shadow-sm rounded-lg p-6 flex flex-col gap-y-3">
+                <p className="font-semibold mb-4">Các khuyến mãi đã áp dụng</p>
+                {product?.promotions.map((promotion, idx) => <div key={promotion.id} className="flex justify-between">
+                    <div className="flex gap-x-2 items-center">
+                        {idx + 1}.
+                        <span className="text-sm truncate">{promotion.name}</span>
+                        |
+                        <span className="text-primary text-sm font-semibold">{
+                            promotion.promotionType === PromotionType.FIXED_AMOUNT ? formatCurrencyVND(promotion.discountValue) : `${promotion.discountValue}%`
+                        }</span>
+                    </div>
+
+                    <Popconfirm onConfirm={() => handleRemoveProductPromotion(promotion.id)} title='Bỏ áp dụng khuyến mãi này?' description='Bạn có chắc là muốn bỏ áp dụng khuyến mãi này?' >
+                        <Button danger size="small" type="primary" icon={<DeleteOutlined />}>Xóa</Button>
+                    </Popconfirm>
+                </div>)}
+            </div>}
+
             <div className="bg-white shadow-sm rounded-lg p-6 flex flex-col gap-y-3">
                 <p className="font-semibold mb-4">Reviews & Rating</p>
                 {reportEvaluation?.report.totalEvaluation! > 0 ? <div className="flex flex-col gap-y-3">
