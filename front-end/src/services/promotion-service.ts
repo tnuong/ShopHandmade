@@ -13,7 +13,7 @@ class PromotionService {
     }
 
     getAllPromotionsNonPagination() : Promise<DataResponse<PromotionResource[]>> {
-        return axiosConfig.get("/api/KhuyenMai/khong-phan-trang");
+        return axiosConfig.get("/api/KhuyenMai/hoat-dong");
     }
 
     createPromotion(payload: PromotionRequest) : Promise<DataResponse<PromotionResource>> {

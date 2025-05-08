@@ -102,10 +102,10 @@ const OrderManagement: FC = () => {
         },
         {
             title: 'Tổng tiền',
-            dataIndex: 'totalPrice',
-            key: 'totalPrice',
-            render(_, { totalPrice }) {
-                return <span>{formatCurrencyVND(totalPrice)}</span>
+            dataIndex: 'totalPriceAfterDiscount',
+            key: 'totalPriceAfterDiscount',
+            render(_, { totalPriceAfterDiscount }) {
+                return <span>{formatCurrencyVND(totalPriceAfterDiscount)}</span>
             },
         },
         {

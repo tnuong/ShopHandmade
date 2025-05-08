@@ -27,7 +27,7 @@ namespace back_end.Services.Implements
         {
             // Load trước danh sách sản phẩm và khuyến mãi cần thiết
             var products = await dbContext.SanPhams
-                .Where(p => request.ProductIds.Contains(p.MaSanPham))
+                .Where(p => !p.TrangThaiXoa && request.ProductIds.Contains(p.MaSanPham))
                 .ToListAsync();
 
             if (products.Count != request.ProductIds.Count)
@@ -41,7 +41,7 @@ namespace back_end.Services.Implements
             var invalidPromotions = promotions.Where(p =>
                 p.TrangThai == PromotionStatus.INACTIVE ||
                 p.TrangThai == PromotionStatus.EXPIRED ||
-                p.NgayKetThuc < DateTime.Now.Date).ToList();
+                p.NgayKetThuc.Date < DateTime.Now.Date).ToList();
 
             if (invalidPromotions.Any())
                 throw new NotFoundException("Vui lòng kiểm tra lại danh sách khuyến mại");
@@ -166,7 +166,7 @@ namespace back_end.Services.Implements
         {
             var lowerString = searchString?.ToLower() ?? "";
             var queryable = dbContext.KhuyenMais
-                .Where(br =>br.TenKhuyenMai.ToLower().Contains(lowerString));
+                .Where(br => br.TenKhuyenMai.ToLower().Contains(lowerString));
 
             List<KhuyenMai> khuyenMais = await queryable
                 .Skip((pageIndex - 1) * pageSize)
@@ -191,9 +191,10 @@ namespace back_end.Services.Implements
         }
 
 
-        public async Task<BaseResponse> GetAllPromotions()
+        public async Task<BaseResponse> GetAllActivePromotions()
         {
             List<KhuyenMai> khuyenMais = await dbContext.KhuyenMais
+                .Where(km => km.TrangThai == PromotionStatus.ACTIVE && km.NgayKetThuc.Date >= DateTime.Now.Date)
                 .ToListAsync();
 
             var khuyenMaiResources = khuyenMais.Select(km => applicationMapper.MapToKhuyenMai(km)).ToList();

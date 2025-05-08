@@ -3,7 +3,7 @@ import axiosConfig from '../configuration/axiosConfig';
 
 class BlogService {
     createBlog(payload: FormData) : Promise<BaseResponse> {
-        return axiosConfig.post('/api/Blog', payload);
+        return axiosConfig.post('/api/BaiViet', payload);
     }
 
     getAllBlogs(): Promise<DataResponse<BlogResource[]>> {

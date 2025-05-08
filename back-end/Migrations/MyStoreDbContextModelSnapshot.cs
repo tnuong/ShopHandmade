@@ -85,21 +85,21 @@ namespace back_end.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "624a0d1a-de6b-4715-91f1-673744cb6614",
+                            Id = "b2b67bf7-8bae-447b-b293-dd638bea387b",
                             ConcurrencyStamp = "1",
                             Name = "ADMIN",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "8e9cc870-43d5-4ebe-8f82-564bbdc67222",
+                            Id = "8088491f-213a-420d-a11e-feb4f2788552",
                             ConcurrencyStamp = "1",
                             Name = "CUSTOMER",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = "babd173a-83a7-4c00-8aff-25f056c52438",
+                            Id = "6cc53e84-6847-48da-a787-7a32b7c2cf76",
                             ConcurrencyStamp = "1",
                             Name = "EMPLOYEE",
                             NormalizedName = "EMPLOYEE"
@@ -125,8 +125,8 @@ namespace back_end.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "c533735c-630e-4fa7-839e-f0c30fea1318",
-                            RoleId = "624a0d1a-de6b-4715-91f1-673744cb6614"
+                            UserId = "aec038d4-4b01-4088-93ac-fc79bed54d8d",
+                            RoleId = "b2b67bf7-8bae-447b-b293-dd638bea387b"
                         });
                 });
 
@@ -260,17 +260,13 @@ namespace back_end.Migrations
 
                     b.Property<string>("MaNguoiDanhGia")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("MaSanPham")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("NgayTao")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("NguoiDanhGiaId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("NoiDung")
                         .IsRequired()
@@ -281,9 +277,9 @@ namespace back_end.Migrations
 
                     b.HasKey("MaDanhGiaSP");
 
-                    b.HasIndex("MaSanPham");
+                    b.HasIndex("MaNguoiDanhGia");
 
-                    b.HasIndex("NguoiDanhGiaId");
+                    b.HasIndex("MaSanPham");
 
                     b.ToTable("DanhGiaSanPhams");
                 });
@@ -413,9 +409,6 @@ namespace back_end.Migrations
                         .HasColumnType("float");
 
                     b.Property<double>("TongTienTruocKhuyenMai")
-                        .HasColumnType("float");
-
-                    b.Property<double>("TotalAmount")
                         .HasColumnType("float");
 
                     b.Property<string>("TrangThai")
@@ -556,7 +549,7 @@ namespace back_end.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TenKhuyeMai")
+                    b.Property<string>("TenKhuyenMai")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -608,9 +601,6 @@ namespace back_end.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("MaNhanVien")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NhanVienId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("ThoiGianChinhSua")
@@ -624,7 +614,7 @@ namespace back_end.Migrations
 
                     b.HasIndex("MaDonHang");
 
-                    b.HasIndex("NhanVienId");
+                    b.HasIndex("MaNhanVien");
 
                     b.ToTable("LichSuDonHangs");
                 });
@@ -756,20 +746,20 @@ namespace back_end.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "c533735c-630e-4fa7-839e-f0c30fea1318",
+                            Id = "aec038d4-4b01-4088-93ac-fc79bed54d8d",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "147511db-7203-4371-ac50-61587541a5c5",
+                            ConcurrencyStamp = "8407953d-7070-40ec-966c-dfe1152bed40",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             HoVaTen = "Thanh Nương",
                             LockoutEnabled = false,
-                            NgayTao = new DateTime(2025, 5, 6, 21, 41, 37, 117, DateTimeKind.Local).AddTicks(1919),
+                            NgayTao = new DateTime(2025, 5, 8, 22, 16, 8, 194, DateTimeKind.Local).AddTicks(2655),
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEPhGggd1JS2mSKdb4fHoWsfzPt5OC8tCSPuq4vQiwvQ/m+fX7eWuWA7YfFtuW7xw9w==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEIc1ShpzvS4TC04B4Edx4IHCKNtRW1wQV905Wad2Oi8qIeDCpjkODwkJi+Vd/S9G7Q==",
                             PhoneNumber = "0123456789",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "5c148be0-3cdd-45dd-bc28-d5426ca51704",
+                            SecurityStamp = "97c6bd48-dbe6-41ae-adc9-1247707fbb09",
                             ThoiGianHoatDongGanDay = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             TrangThaiHoatDong = false,
                             TrangThaiKhoa = false,
@@ -1037,16 +1027,13 @@ namespace back_end.Migrations
 
                     b.Property<string>("MaNguoiNhan")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("MaThamChieu")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("NgayTao")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("NguoiNhanId")
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("NoiDung")
                         .IsRequired()
@@ -1061,7 +1048,7 @@ namespace back_end.Migrations
 
                     b.HasKey("MaThongBao");
 
-                    b.HasIndex("NguoiNhanId");
+                    b.HasIndex("MaNguoiNhan");
 
                     b.ToTable("ThongBaos");
                 });
@@ -1185,7 +1172,7 @@ namespace back_end.Migrations
             modelBuilder.Entity("back_end.Core.Models.BienTheSanPham", b =>
                 {
                     b.HasOne("back_end.Core.Models.KichThuoc", "KichThuoc")
-                        .WithMany("ProductVariants")
+                        .WithMany("DanhSachBienTheSanPham")
                         .HasForeignKey("MaKichThuoc")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1230,16 +1217,16 @@ namespace back_end.Migrations
 
             modelBuilder.Entity("back_end.Core.Models.DanhGiaSanPham", b =>
                 {
+                    b.HasOne("back_end.Core.Models.NguoiDung", "NguoiDanhGia")
+                        .WithMany("DanhSachDanhGia")
+                        .HasForeignKey("MaNguoiDanhGia")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("back_end.Core.Models.SanPham", "SanPham")
                         .WithMany("DanhSachDanhGia")
                         .HasForeignKey("MaSanPham")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("back_end.Core.Models.NguoiDung", "NguoiDanhGia")
-                        .WithMany("DanhSachDanhGia")
-                        .HasForeignKey("NguoiDanhGiaId")
-                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("NguoiDanhGia");
@@ -1344,7 +1331,7 @@ namespace back_end.Migrations
 
                     b.HasOne("back_end.Core.Models.NguoiDung", "NhanVien")
                         .WithMany()
-                        .HasForeignKey("NhanVienId");
+                        .HasForeignKey("MaNhanVien");
 
                     b.Navigation("DonHang");
 
@@ -1419,7 +1406,9 @@ namespace back_end.Migrations
                 {
                     b.HasOne("back_end.Core.Models.NguoiDung", "NguoiNhan")
                         .WithMany("DanhSachThongBao")
-                        .HasForeignKey("NguoiNhanId");
+                        .HasForeignKey("MaNguoiNhan")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("NguoiNhan");
                 });
@@ -1487,7 +1476,7 @@ namespace back_end.Migrations
 
             modelBuilder.Entity("back_end.Core.Models.KichThuoc", b =>
                 {
-                    b.Navigation("ProductVariants");
+                    b.Navigation("DanhSachBienTheSanPham");
                 });
 
             modelBuilder.Entity("back_end.Core.Models.MauSac", b =>

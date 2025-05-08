@@ -11,6 +11,6 @@ namespace back_end.Core.Models
 
         public bool TrangThaiXoa { get; set; } = false;
 
-        public ICollection<BienTheSanPham>? ProductVariants { get; set; }
+        public ICollection<BienTheSanPham>? DanhSachBienTheSanPham { get; set; }
     }
 }

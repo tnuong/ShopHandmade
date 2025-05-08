@@ -23,7 +23,7 @@ const Product: FC<ProductProps> = ({ product }) => {
 
     return (
         <div className="relative">
-            {hasPromotions && (
+            {hasPromotions && product.quantity > 0 && (
                 <div className="absolute top-2 left-0 flex flex-col gap-1 z-10">
                     {product.promotions.map((promo) => (
                         <Tooltip
@@ -52,7 +52,7 @@ const Product: FC<ProductProps> = ({ product }) => {
             {product.quantity > 0 ? (
                 <ProductInner product={product} />
             ) : (
-                <Badge.Ribbon placement="start" text="Hết hàng" color="volcano">
+                <Badge.Ribbon placement="start"  text="Hết hàng" color="volcano">
                     <ProductInner product={product} />
                 </Badge.Ribbon>
             )}

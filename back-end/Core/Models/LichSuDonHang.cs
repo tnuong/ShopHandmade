@@ -13,7 +13,7 @@ namespace back_end.Core.Models
         [ForeignKey(nameof(DonHang))]
         public int MaDonHang { get; set; }
         public DonHang DonHang { get; set; }
-        [ForeignKey(nameof(NguoiDung))]
+        [ForeignKey(nameof(NhanVien))]
         public string? MaNhanVien { get; set; }
         public NguoiDung? NhanVien { get; set; }
     }

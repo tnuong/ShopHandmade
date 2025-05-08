@@ -50,17 +50,6 @@ const BlogManagement: FC = () => {
             }
         },
         {
-            title: 'Nội dụng',
-            dataIndex: 'content',
-            key: 'content',
-            render(value) {
-                return <div
-                    className="text-[16px] line-clamp-1"
-                    dangerouslySetInnerHTML={{ __html: value }}
-                />
-            }
-        },
-        {
             title: 'Trạng thái',
             dataIndex: 'isHidden',
             key: 'isHidden',

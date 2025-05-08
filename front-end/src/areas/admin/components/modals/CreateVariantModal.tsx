@@ -2,7 +2,7 @@ import { Button, Form, FormProps, GetProp, Image, InputNumber, Select, Upload, U
 import { FC, useEffect, useState } from "react";
 import { InboxOutlined } from '@ant-design/icons';
 import Dragger from "antd/es/upload/Dragger";
-import {  ColorResource, ProductResource, SizeResource } from "../../../../resources";
+import { ColorResource, ProductResource, SizeResource } from "../../../../resources";
 import productService from "../../../../services/product-service";
 import Loading from "../../../shared/Loading";
 import variantService from "../../../../services/variant-service";
@@ -61,7 +61,7 @@ const CreateVariantModal: FC<CreateVariantModalProps> = ({
             }
         });
 
-        if(values.images) {
+        if (values.images) {
             values.images.forEach(file => {
                 if (file.originFileObj) {
                     formData.append('images', file.originFileObj, file.name);
@@ -76,11 +76,16 @@ const CreateVariantModal: FC<CreateVariantModalProps> = ({
 
         setLoading(true)
         const response = await variantService.createVariant(formData);
-        console.log(response)
-        message.success(response.message)
-        resetForm();
-        handleOk()
         setLoading(false)
+
+        if (response.success) {
+            message.success(response.message)
+            resetForm();
+            handleOk()
+        } else {
+            message.error(response.message)
+        }
+
     };
 
     const resetForm = () => {
@@ -187,7 +192,7 @@ const CreateVariantModal: FC<CreateVariantModalProps> = ({
                             />
                         )}
                     </Form.Item>
-                  
+
 
                     <Form.Item<VariantRequest>
                         label="Các ảnh khác"
@@ -317,7 +322,7 @@ const CreateVariantModal: FC<CreateVariantModalProps> = ({
                         name="inStock"
                         rules={[{ required: true, message: 'Tồn kho không được để trống!' }]}
                     >
-                        <InputNumber placeholder="Nhập số lượng tồn kho" style={{ width: '100%'}} size="large" min={0} />
+                        <InputNumber placeholder="Nhập số lượng tồn kho" style={{ width: '100%' }} size="large" min={0} />
                     </Form.Item>
 
                 </div>

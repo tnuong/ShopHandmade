@@ -55,11 +55,11 @@ namespace back_end.Services.Implements
         public async Task RemoveSize(int id)
         {
             KichThuoc? size = await myStoreDbContext.KichThuocs
-               .Include(s => s.ProductVariants)
+               .Include(s => s.DanhSachBienTheSanPham)
                .SingleOrDefaultAsync(c => c.MaKichThuoc == id && c.TrangThaiXoa == false)
                    ?? throw new NotFoundException("Không tìm thấy kích cỡ");
 
-            if(size.ProductVariants != null && size.ProductVariants.Any())
+            if(size.DanhSachBienTheSanPham != null && size.DanhSachBienTheSanPham.Any())
             {
                 size.TrangThaiXoa = true;
             } else

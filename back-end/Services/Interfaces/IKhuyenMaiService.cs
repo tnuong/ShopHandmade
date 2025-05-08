@@ -10,7 +10,7 @@ namespace back_end.Services.Interfaces
         Task<BaseResponse> DeleteProductPromotion(int productId, int promotionId);
         Task<BaseResponse> UpdatePromotion(int promotionId, PromotionRequest request);
         Task<BaseResponse> GetAllPromotions(int pageIndex, int pageSize, string searchString);
-        Task<BaseResponse> GetAllPromotions();
+        Task<BaseResponse> GetAllActivePromotions();
         Task<BaseResponse> GetPromotionById(int id);
         Task<BaseResponse> AssignPromotion(AssignPromotionRequest request);
     }

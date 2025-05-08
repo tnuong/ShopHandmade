@@ -260,7 +260,7 @@ const ProductDetail: FC = () => {
         </div>
         <div className="col-span-4 flex flex-col gap-y-6 h-full">
             {(product?.promotions.length ?? 0) > 0 && <div className="bg-white shadow-sm rounded-lg p-6 flex flex-col gap-y-3">
-                <p className="font-semibold mb-4">Các khuyến mãi đã áp dụng</p>
+                <p className="font-semibold mb-4">Các khuyến mãi đang áp dụng</p>
                 {product?.promotions.map((promotion, idx) => <div key={promotion.id} className="flex justify-between">
                     <div className="flex gap-x-2 items-center">
                         {idx + 1}.

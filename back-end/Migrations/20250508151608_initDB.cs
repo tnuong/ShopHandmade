@@ -58,7 +58,7 @@ namespace back_end.Migrations
                 {
                     MaKhuyenMai = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TenKhuyeMai = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TenKhuyenMai = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LoaiKhuyenMai = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     GiaTriGiam = table.Column<double>(type: "float", nullable: false),
                     NoiDungKhuyenMai = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -312,8 +312,7 @@ namespace back_end.Migrations
                     TieuDe = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NoiDung = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NgayTao = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    MaNguoiNhan = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NguoiNhanId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    MaNguoiNhan = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     TrangThaiDoc = table.Column<bool>(type: "bit", nullable: false),
                     MaThamChieu = table.Column<int>(type: "int", nullable: true),
                     LoaiThongBao = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -322,10 +321,11 @@ namespace back_end.Migrations
                 {
                     table.PrimaryKey("PK_ThongBaos", x => x.MaThongBao);
                     table.ForeignKey(
-                        name: "FK_ThongBaos_NguoiDungs_NguoiNhanId",
-                        column: x => x.NguoiNhanId,
+                        name: "FK_ThongBaos_NguoiDungs_MaNguoiNhan",
+                        column: x => x.MaNguoiNhan,
                         principalTable: "NguoiDungs",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -429,7 +429,6 @@ namespace back_end.Migrations
                     MaDonHang = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     NgayTao = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TotalAmount = table.Column<double>(type: "float", nullable: false),
                     TienKhuyenMai = table.Column<double>(type: "float", nullable: false),
                     TongTienSauKhuyenMai = table.Column<double>(type: "float", nullable: false),
                     TongTienTruocKhuyenMai = table.Column<double>(type: "float", nullable: false),
@@ -547,8 +546,7 @@ namespace back_end.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     NoiDung = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SoSaoDanhGia = table.Column<int>(type: "int", nullable: false),
-                    MaNguoiDanhGia = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NguoiDanhGiaId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    MaNguoiDanhGia = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     MaSanPham = table.Column<int>(type: "int", nullable: false),
                     NgayTao = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -556,8 +554,8 @@ namespace back_end.Migrations
                 {
                     table.PrimaryKey("PK_DanhGiaSanPhams", x => x.MaDanhGiaSP);
                     table.ForeignKey(
-                        name: "FK_DanhGiaSanPhams_NguoiDungs_NguoiDanhGiaId",
-                        column: x => x.NguoiDanhGiaId,
+                        name: "FK_DanhGiaSanPhams_NguoiDungs_MaNguoiDanhGia",
+                        column: x => x.MaNguoiDanhGia,
                         principalTable: "NguoiDungs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -648,8 +646,7 @@ namespace back_end.Migrations
                     TrangThai = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     GhiChu = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MaDonHang = table.Column<int>(type: "int", nullable: false),
-                    MaNhanVien = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NhanVienId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    MaNhanVien = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -661,8 +658,8 @@ namespace back_end.Migrations
                         principalColumn: "MaDonHang",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_LichSuDonHangs_NguoiDungs_NhanVienId",
-                        column: x => x.NhanVienId,
+                        name: "FK_LichSuDonHangs_NguoiDungs_MaNhanVien",
+                        column: x => x.MaNhanVien,
                         principalTable: "NguoiDungs",
                         principalColumn: "Id");
                 });
@@ -763,22 +760,22 @@ namespace back_end.Migrations
             migrationBuilder.InsertData(
                 table: "NguoiDungs",
                 columns: new[] { "Id", "SoLanDangNhapThatBai", "MaDongBo", "Email", "XacThucEmail", "HinhAnhBia", "HinhDaiDien", "HoVaTen", "ChoPhepKhoa", "ThoiGianKhoa", "NgayTao", "EmailChuanHoa", "TenDangNhapChuanHoa", "MatKhauMaHoa", "SoDienThoai", "XacThucSoDienThoai", "MaBaoMat", "ThoiGianHoatDongGanDay", "TrangThaiHoatDong", "TrangThaiKhoa", "KichHoat2Lop", "TenDangNhap" },
-                values: new object[] { "c533735c-630e-4fa7-839e-f0c30fea1318", 0, "147511db-7203-4371-ac50-61587541a5c5", "admin@gmail.com", true, null, null, "Thanh Nương", false, null, new DateTime(2025, 5, 6, 21, 41, 37, 117, DateTimeKind.Local).AddTicks(1919), "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAEAACcQAAAAEPhGggd1JS2mSKdb4fHoWsfzPt5OC8tCSPuq4vQiwvQ/m+fX7eWuWA7YfFtuW7xw9w==", "0123456789", false, "5c148be0-3cdd-45dd-bc28-d5426ca51704", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, false, "admin" });
+                values: new object[] { "aec038d4-4b01-4088-93ac-fc79bed54d8d", 0, "8407953d-7070-40ec-966c-dfe1152bed40", "admin@gmail.com", true, null, null, "Thanh Nương", false, null, new DateTime(2025, 5, 8, 22, 16, 8, 194, DateTimeKind.Local).AddTicks(2655), "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAEAACcQAAAAEIc1ShpzvS4TC04B4Edx4IHCKNtRW1wQV905Wad2Oi8qIeDCpjkODwkJi+Vd/S9G7Q==", "0123456789", false, "97c6bd48-dbe6-41ae-adc9-1247707fbb09", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, false, "admin" });
 
             migrationBuilder.InsertData(
                 table: "VaiTros",
                 columns: new[] { "MaVaiTro", "MaDongBo", "TenVaiTro", "TenVaiTroChuanHoa" },
                 values: new object[,]
                 {
-                    { "624a0d1a-de6b-4715-91f1-673744cb6614", "1", "ADMIN", "ADMIN" },
-                    { "8e9cc870-43d5-4ebe-8f82-564bbdc67222", "1", "CUSTOMER", "CUSTOMER" },
-                    { "babd173a-83a7-4c00-8aff-25f056c52438", "1", "EMPLOYEE", "EMPLOYEE" }
+                    { "6cc53e84-6847-48da-a787-7a32b7c2cf76", "1", "EMPLOYEE", "EMPLOYEE" },
+                    { "8088491f-213a-420d-a11e-feb4f2788552", "1", "CUSTOMER", "CUSTOMER" },
+                    { "b2b67bf7-8bae-447b-b293-dd638bea387b", "1", "ADMIN", "ADMIN" }
                 });
 
             migrationBuilder.InsertData(
                 table: "NguoiDungVaiTros",
                 columns: new[] { "MaVaiTro", "MaNguoiDung" },
-                values: new object[] { "624a0d1a-de6b-4715-91f1-673744cb6614", "c533735c-630e-4fa7-839e-f0c30fea1318" });
+                values: new object[] { "b2b67bf7-8bae-447b-b293-dd638bea387b", "aec038d4-4b01-4088-93ac-fc79bed54d8d" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_BaiViets_MaTacGia",
@@ -816,14 +813,14 @@ namespace back_end.Migrations
                 column: "DanhSachNguoiYeuThichId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DanhGiaSanPhams_MaNguoiDanhGia",
+                table: "DanhGiaSanPhams",
+                column: "MaNguoiDanhGia");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DanhGiaSanPhams_MaSanPham",
                 table: "DanhGiaSanPhams",
                 column: "MaSanPham");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DanhGiaSanPhams_NguoiDanhGiaId",
-                table: "DanhGiaSanPhams",
-                column: "NguoiDanhGiaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DanhMucs_DanhMucChaMaDanhMuc",
@@ -888,9 +885,9 @@ namespace back_end.Migrations
                 column: "MaDonHang");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LichSuDonHangs_NhanVienId",
+                name: "IX_LichSuDonHangs_MaNhanVien",
                 table: "LichSuDonHangs",
-                column: "NhanVienId");
+                column: "MaNhanVien");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
@@ -946,9 +943,9 @@ namespace back_end.Migrations
                 column: "MaNguoiDung");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ThongBaos_NguoiNhanId",
+                name: "IX_ThongBaos_MaNguoiNhan",
                 table: "ThongBaos",
-                column: "NguoiNhanId");
+                column: "MaNguoiNhan");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TinNhans_MaNguoiGui",

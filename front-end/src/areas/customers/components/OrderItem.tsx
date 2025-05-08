@@ -101,8 +101,6 @@ const OrderItem: FC<OrderItemProps> = ({
         >
             <span className="cursor-pointer px-3 py-1 rounded-lg hover:bg-gray-100">Đánh giá sản phẩm</span>
         </Popover>}
-
-        <span className="cursor-pointer px-3 py-1 rounded-lg hover:bg-gray-100">Các đánh giá của bạn</span>
     </div>
 
     return <div className="flex justify-between items-center">

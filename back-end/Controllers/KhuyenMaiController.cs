@@ -39,10 +39,10 @@ namespace back_end.Controllers
             return Ok(response);
         }
 
-        [HttpGet("khong-phan-trang")]
+        [HttpGet("hoat-dong")]
         public async Task<IActionResult> GetPromotion()
         {
-            var response = await khuyenMaiService.GetAllPromotions();
+            var response = await khuyenMaiService.GetAllActivePromotions();
             return Ok(response);
         }
 

@@ -10,7 +10,7 @@ namespace back_end.Core.Models
         public string TieuDe { get; set; }
         public string NoiDung { get; set; }
         public DateTime NgayTao { get; set; }
-        [ForeignKey(nameof(NguoiDung))]
+        [ForeignKey(nameof(NguoiNhan))]
         public string MaNguoiNhan { get; set; }
         public NguoiDung NguoiNhan { get; set; }
         public bool TrangThaiDoc {  get; set; }

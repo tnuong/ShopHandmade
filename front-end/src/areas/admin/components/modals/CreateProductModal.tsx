@@ -85,10 +85,17 @@ const CreateProductModal: FC<CreateProductModalProps> = ({
 
         setLoading(true)
         const response = await productService.createProduct(formData);
-        message.success(response.message)
-        resetForm();
-        handleOk()
         setLoading(false)
+
+        if(response.success) {
+            message.success(response.message)
+            resetForm();
+            handleOk()
+        } else {
+            message.error(response.message)
+        }
+      
+        
     };
 
     const resetForm = () => {
