@@ -2,7 +2,7 @@ import { CreateOrderPaypal } from '../areas/customers/components/modals/PaymentM
 import { CheckoutType } from '../areas/customers/pages/CheckoutPage';
 import { OrderFilter } from '../areas/customers/pages/OrdersPage';
 import axiosConfig from '../configuration/axiosConfig';
-import { DataResponse, OrderResource, PaginationResponse } from "../resources";
+import { BaseResponse, DataResponse, OrderResource, PaginationResponse } from "../resources";
 import { CreateOrderResponse } from '../resources/paypal';
 
 class OrderService {
@@ -42,27 +42,27 @@ class OrderService {
         return axiosConfig.get("/api/DonHang?" + queryString);
     }
 
-    updateConfirmed(id: number): Promise<void> {
+    updateConfirmed(id: number): Promise<BaseResponse> {
         return axiosConfig.put(`/api/DonHang/cap-nhat/${id}/xac-nhan`);
     }
 
-    updateCancelled(id: number): Promise<void> {
+    updateCancelled(id: number): Promise<BaseResponse> {
         return axiosConfig.put(`/api/DonHang/cap-nhat/${id}/huy-don-hang`);
     }
 
-    updateCompleted(id: number): Promise<void> {
+    updateCompleted(id: number): Promise<BaseResponse> {
         return axiosConfig.put(`/api/DonHang/cap-nhat/${id}/hoan-thanh`);
     }
 
-    updateRejected(id: number): Promise<void> {
+    updateRejected(id: number): Promise<BaseResponse> {
         return axiosConfig.put(`/api/DonHang/cap-nhat/${id}/tu-choi`);
     }
 
-    updateDelivering(id: number): Promise<void> {
+    updateDelivering(id: number): Promise<BaseResponse> {
         return axiosConfig.put(`/api/DonHang/cap-nhat/${id}/van-chuyen`);
     }
 
-    updateDelivered(id: number): Promise<void> {
+    updateDelivered(id: number): Promise<BaseResponse> {
         return axiosConfig.put(`/api/DonHang/cap-nhat/${id}/da-giao`);
     }
 }

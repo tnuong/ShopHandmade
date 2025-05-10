@@ -10,18 +10,19 @@ import { formatCurrencyVND, formatDateTime } from "../../../utils/format";
 import { OrderStatus } from "../../../constants/OrderStatus";
 
 type OrderCardProps = {
+    loading: boolean;
     order: OrderResource;
     onCancel: (id: number) => void;
     onCompleted: (id: number) => void;
 }
 
 const OrderCard: FC<OrderCardProps> = ({
+    loading,
     order,
     onCancel,
     onCompleted
 }) => {
     const { handleCancel, handleOk, isModalOpen, showModal } = useModal();
-
 
     return <div className="flex items-center justify-between p-8 py-6 rounded-3xl border-[1px] border-gray-300">
         <div className="flex flex-1 flex-col gap-y-4 w-full">
@@ -60,11 +61,11 @@ const OrderCard: FC<OrderCardProps> = ({
         </div>
 
         <div className="flex items-center gap-x-2">
-            {order.orderStatus === OrderStatus.PENDING && <Button onClick={() => onCancel(order.id)} size="small" type="primary" danger>
+            {order.orderStatus === OrderStatus.PENDING && <Button loading={loading} onClick={() => onCancel(order.id)} size="small" type="primary" danger>
                 Hủy đơn
             </Button>}
 
-            {order.orderStatus === OrderStatus.DELIVERED && <Button onClick={() => onCompleted(order.id)} size="small" type="primary">
+            {order.orderStatus === OrderStatus.DELIVERED && <Button loading={loading} onClick={() => onCompleted(order.id)} size="small" type="primary">
                 Đã nhận
             </Button>}
             <Button

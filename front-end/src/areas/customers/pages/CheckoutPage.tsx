@@ -121,7 +121,9 @@ const CheckoutPage: FC = () => {
     const { isModalOpen, handleCancel, handleOk, showModal } = useModal();
     const [form] = Form.useForm<CheckoutType>();
     const dispatch = useDispatch<AppDispatch>();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
+    const [loading, setLoading] = useState(false)
 
     const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
         const scrollTop = event.currentTarget.scrollTop;
@@ -165,7 +167,9 @@ const CheckoutPage: FC = () => {
             items: items
         }
 
+        setLoading(true)
         const response = await orderService.creaeteOrder(payload);
+        setLoading(false)
         if (response.success) {
             message.success(response.message)
             handleOk();
@@ -353,12 +357,13 @@ const CheckoutPage: FC = () => {
                         >
                             {discountedTotal === 0 
                             ? <div className="flex justify-center">
-                                <Button type="primary" onClick={handleCreateOrder} size="large">Đặt hàng ngay</Button>
+                                <Button loading={loading} type="primary" onClick={handleCreateOrder} size="large">
+                                     {loading ? 'Đang xử lí': 'Đặt hàng ngay'}
+                                </Button>
                             </div> 
                             : <PayPalScriptProvider deferLoading={false} options={initialOptions}>
-                                <PaymentMethodModal onPaypalPayment={handlePaypalPayment} onVnpayPayment={handleCreateVnpayPayment} onCashPayment={handleCreateOrder} />
+                                <PaymentMethodModal loading={loading} onPaypalPayment={handlePaypalPayment} onVnpayPayment={handleCreateVnpayPayment} onCashPayment={handleCreateOrder} />
                             </PayPalScriptProvider>}
-
 
                         </Modal>
                     </div>

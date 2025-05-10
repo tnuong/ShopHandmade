@@ -91,18 +91,14 @@ const Sidebar: FC = () => {
     const { user } = useSelector(selectAuth)
 
     const onClick: MenuProps['onClick'] = (e) => {
-        console.log('click ', e);
         setCurrent(e.key);
     };
 
-    useEffect(() => {
-        console.log(user)
-    }, [])
 
     return <div className="min-w-[270px] flex flex-col justify-between h-screen overflow-y-auto custom-scrollbar scrollbar-h-4">
         <div className="flex flex-col p-4 gap-y-8">
             <div className="text-2xl font-bold text-center p-2">
-                <span className="text-black">&lt;Hung</span><span className="text-primary">Shop /&gt;</span>
+                <span className="text-black">&lt;Hand</span><span className="text-primary">Made /&gt;</span>
             </div>
             <Menu
                 onClick={onClick}
@@ -114,9 +110,7 @@ const Sidebar: FC = () => {
                 className="text-[17px]"
             />
         </div>
-        <div className="p-4">
-            <Button className="w-full">Đăng xuất</Button>
-        </div>
+     
     </div>;
 };
 

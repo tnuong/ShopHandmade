@@ -3,7 +3,7 @@ import { Button, Dropdown, Segmented, Table, Tooltip, message } from 'antd';
 import type { MenuProps, TableProps } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
 import CardBorder from "../../components/CardBorder";
-import { OrderResource } from "../../../../resources";
+import { BaseResponse, OrderResource } from "../../../../resources";
 import orderService from "../../../../services/order-service";
 import { Link } from "react-router-dom";
 import { formatCurrencyVND, formatDateTime } from "../../../../utils/format";
@@ -23,7 +23,9 @@ const OrderManagement: FC = () => {
     const [params, setParams] = useState<OrderFilter>(initialValues)
     const [orders, setOrders] = useState<OrderResource[]>([])
     const [total, setTotal] = useState(6)
-    const debounceValue = useDebounce(params.name, 600)
+    const debounceValue = useDebounce(params.name, 600);
+    const [loading, setLoading] = useState(false);
+    const [orderId, setOrderId] = useState(0)
 
     const fetchOrders = async (queryParams: OrderFilter) => {
         const response = await orderService.getAllOrders(queryParams);
@@ -68,10 +70,15 @@ const OrderManagement: FC = () => {
             }]
     }
 
-    const updateStatusOrder = async (callback: (id: number) => Promise<void>, id: number) => {
+    const updateStatusOrder = async (callback: (id: number) => Promise<BaseResponse>, id: number) => {
         try {
-            await callback(id);
+            setLoading(true)
+            setOrderId(id)
+            const response = await callback(id);
+            setLoading(false)
+            message.success('Cập nhật trạng thái đơn hàng thành công')
             fetchOrders(params)
+
         } catch (error) {
             message.error('Cập nhật đơn hàng thất bại');
         }
@@ -123,7 +130,9 @@ const OrderManagement: FC = () => {
                         (orderStatus === OrderStatus.CANCELLED || orderStatus === OrderStatus.REJECTED || orderStatus === OrderStatus.COMPLETED || orderStatus === OrderStatus.DELIVERED) ?
                             <button disabled className="cursor-default">{getOrderStatusTag(orderStatus as OrderStatusType)}</button> :
                             <Tooltip placement="top" title='Ấn vào để thay đổi trạng thái'>
-                                <button className="cursor-pointer">{getOrderStatusTag(orderStatus as OrderStatusType)}</button>
+                                <button className="cursor-pointer">{
+                                    loading ? 'Đang xử lí...' : getOrderStatusTag(orderStatus as OrderStatusType)
+                                }</button>
                             </Tooltip>
                     }
 

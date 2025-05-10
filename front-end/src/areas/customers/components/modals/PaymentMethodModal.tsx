@@ -8,6 +8,7 @@ import Loading from "../../../shared/Loading";
 import images from "../../../../assets";
 
 type PaymentMethodModalProps = {
+    loading: boolean;
     onCashPayment: () => void;
     onVnpayPayment: () => void;
     onPaypalPayment: (orderId: string) => Promise<void>
@@ -18,6 +19,7 @@ export type CreateOrderPaypal = {
 }
 
 const PaymentMethodModal: FC<PaymentMethodModalProps> = ({
+    loading,
     onCashPayment,
     onVnpayPayment,
     onPaypalPayment
@@ -41,7 +43,9 @@ const PaymentMethodModal: FC<PaymentMethodModalProps> = ({
 
     return <div className="flex flex-col p-4">
         {isPending && <Loading />}
-        <Button onClick={onCashPayment} size="large">Thanh toán khi nhận hàng</Button>
+        <Button loading={loading} onClick={onCashPayment} size="large">
+            {loading ? 'Đang xử lí': 'Thanh toán khi nhận hàng'}
+        </Button>
         <Divider className="my-0" plain>Hoặc</Divider>
         <div className="flex items-center gap-x-5 w-full">
             <Button onClick={onVnpayPayment} size="large" icon={<img alt='ảnh vnpay' className="w-8 h-8 object-cover" src={images.vnpay} />} className="w-1/2">Thanh toán VNPAY</Button>
