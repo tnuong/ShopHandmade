@@ -20,10 +20,8 @@ const ProductTabs: FC = () => {
             pageSize: 8
         } as ProductFilter);
 
-        setTimeout(() => {
-            setLoading(false)
-            setProducts(response.data)
-        }, 500)
+        setLoading(false)
+        setProducts(response.data)
     }
 
     const fetchTopFavoriteProducts = async () => {

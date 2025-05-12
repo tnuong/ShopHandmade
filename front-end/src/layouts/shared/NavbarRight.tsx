@@ -36,7 +36,7 @@ const NavbarRight: FC = () => {
                 placement="bottomRight"
                 content={<SearchDialog />}
             >
-                 <FontAwesomeIcon className="cursor-pointer" icon={faSearch} />
+                <FontAwesomeIcon className="cursor-pointer" icon={faSearch} />
             </Popover>
             <Popover
                 trigger='click'
@@ -50,7 +50,8 @@ const NavbarRight: FC = () => {
             >
                 <FontAwesomeIcon className="cursor-pointer" icon={faUser} />
             </Popover>
-            <FontAwesomeIcon className="cursor-pointer hidden lg:block" icon={faHeart} />
+            <Link to='/account/wishlist'>
+                <FontAwesomeIcon className="cursor-pointer hidden lg:block" icon={faHeart} /></Link>
             <Badge size="small" showZero count={cartItems.length}>
                 <Link to="/cart">
                     <FontAwesomeIcon icon={faShoppingCart} />

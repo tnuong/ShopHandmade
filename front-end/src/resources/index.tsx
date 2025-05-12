@@ -105,6 +105,7 @@ export type ProductResource = {
     zoomImage: string;
     category: CategoryResource;
     manufacturer: ManufacturerResource;
+    hasWishlist: boolean;
     brand: BrandResource;
     images: ImageResource[];
     promotions: PromotionResource[]

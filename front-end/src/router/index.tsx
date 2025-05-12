@@ -44,6 +44,7 @@ import RoleBasedGuard from "./role-based-guard";
 import ManufacturerManagement from "../areas/admin/pages/ManufacturerManagement";
 import SupplierManagement from "../areas/admin/pages/SupplierManagement";
 import PromotionManagement from "../areas/admin/pages/promotions/PromotionManagement";
+import Wishlist from "../areas/customers/pages/Wishlist";
 
 const router = createBrowserRouter([
     {
@@ -86,6 +87,7 @@ const router = createBrowserRouter([
                 path: "/cart",
                 element: <CartPage />,
             },
+
             {
                 path: "/blog",
                 element: <BlogLayout />,
@@ -120,6 +122,10 @@ const router = createBrowserRouter([
                         path: "address-order",
                         element: <AddressOrderPage />,
                     },
+                    {
+                        path: "/account/wishlist",
+                        element: <Wishlist />,
+                    },
                 ]
             },
             {
@@ -149,11 +155,11 @@ const router = createBrowserRouter([
             },
             {
                 path: 'manufacturer',
-                element:  <RoleBasedGuard accessibleRoles={['ADMIN']} element={<ManufacturerManagement />} />,
+                element: <RoleBasedGuard accessibleRoles={['ADMIN']} element={<ManufacturerManagement />} />,
             },
             {
                 path: 'supplier',
-                element:  <RoleBasedGuard accessibleRoles={['ADMIN']} element={<SupplierManagement />} />,
+                element: <RoleBasedGuard accessibleRoles={['ADMIN']} element={<SupplierManagement />} />,
             },
             {
                 path: 'variant/:id',
@@ -165,19 +171,19 @@ const router = createBrowserRouter([
             },
             {
                 path: 'category',
-                element:  <RoleBasedGuard accessibleRoles={['ADMIN']} element={<CategoryManagement />} />,
+                element: <RoleBasedGuard accessibleRoles={['ADMIN']} element={<CategoryManagement />} />,
             },
             {
                 path: 'promotion',
-                element:  <RoleBasedGuard accessibleRoles={['ADMIN']} element={<PromotionManagement />} />,
+                element: <RoleBasedGuard accessibleRoles={['ADMIN']} element={<PromotionManagement />} />,
             },
             {
                 path: 'brand',
-                element:  <RoleBasedGuard accessibleRoles={['ADMIN']} element={<BrandManagement />} />,
+                element: <RoleBasedGuard accessibleRoles={['ADMIN']} element={<BrandManagement />} />,
             },
             {
                 path: 'color',
-                element:  <RoleBasedGuard accessibleRoles={['ADMIN']} element={<ColorManagement />} />,
+                element: <RoleBasedGuard accessibleRoles={['ADMIN']} element={<ColorManagement />} />,
             },
             {
                 path: 'size',
@@ -197,15 +203,15 @@ const router = createBrowserRouter([
             },
             {
                 path: 'blog',
-                element:  <RoleBasedGuard accessibleRoles={['ADMIN']} element={<BlogManagement />} />,
+                element: <RoleBasedGuard accessibleRoles={['ADMIN']} element={<BlogManagement />} />,
             },
             {
                 path: 'blog/create',
-                element:  <RoleBasedGuard accessibleRoles={['ADMIN']} element={<CreateBlogPage />} />,
+                element: <RoleBasedGuard accessibleRoles={['ADMIN']} element={<CreateBlogPage />} />,
             },
             {
                 path: 'blog/edit/:id',
-                element:  <RoleBasedGuard accessibleRoles={['ADMIN']} element={<EditBlogPage />} />,
+                element: <RoleBasedGuard accessibleRoles={['ADMIN']} element={<EditBlogPage />} />,
             },
             {
                 path: 'setting/slide',

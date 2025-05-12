@@ -1,4 +1,4 @@
-import { Badge, Image, Modal, Tooltip } from "antd";
+import { Badge, Image, message, Modal, Tooltip } from "antd";
 import { FC, useEffect, useState } from "react";
 import {
     ShoppingCartOutlined
@@ -13,6 +13,8 @@ import useModal from "../../../hooks/useModal";
 import QuickViewModal from "./modals/QuickViewModal";
 import images from "../../../assets";
 import { PromotionType } from "../../../constants/PromotionType";
+import { faHeartBroken, faRemove } from "@fortawesome/free-solid-svg-icons";
+import productService from "../../../services/product-service";
 
 type ProductProps = {
     product: ProductResource
@@ -29,8 +31,8 @@ const Product: FC<ProductProps> = ({ product }) => {
                         <Tooltip
                             key={promo.id}
                             title={`${promo.name} | Giảm ${promo.promotionType === PromotionType.FIXED_AMOUNT
-                                    ? formatCurrencyVND(promo.discountValue)
-                                    : `${promo.discountValue}%`
+                                ? formatCurrencyVND(promo.discountValue)
+                                : `${promo.discountValue}%`
                                 }`}
                         >
                             <div className="relative -ml-1">
@@ -52,7 +54,7 @@ const Product: FC<ProductProps> = ({ product }) => {
             {product.quantity > 0 ? (
                 <ProductInner product={product} />
             ) : (
-                <Badge.Ribbon placement="start"  text="Hết hàng" color="volcano">
+                <Badge.Ribbon placement="start" text="Hết hàng" color="volcano">
                     <ProductInner product={product} />
                 </Badge.Ribbon>
             )}
@@ -71,7 +73,8 @@ const ProductInner: FC<ProductProps> = ({
     const [variants, setVariants] = useState<VariantResource[]>([])
     const [selectVariant, setSelectVariant] = useState<VariantResource | null>(null);
     const [showImage, setShowImage] = useState(product.thumbnail);
-    const { handleCancel, handleOk, isModalOpen, showModal } = useModal()
+    const { handleCancel, handleOk, isModalOpen, showModal } = useModal();
+    const [hasWishlist, setHasWishlist] = useState(product.hasWishlist)
 
     useEffect(() => {
         const fetchVariants = async () => {
@@ -98,6 +101,29 @@ const ProductInner: FC<ProductProps> = ({
         else setShowImage(product.thumbnail)
     }, [hover])
 
+    const handleAddWishlist = async () => {
+        const response = await productService.addWishlist(product.id);
+
+        if(response.success) {
+            message.success(response.message);
+            setHasWishlist(true)
+        } else {
+            message.error(response.message)
+        }
+    }
+
+     const handleRemoveWishlist = async () => {
+        const response = await productService.removeWishlist(product.id);
+
+        if(response.success) {
+            message.success(response.message);
+            setHasWishlist(false)
+        } else {
+            message.error(response.message)
+        }
+    }
+
+
     return <div>
         <div
             onMouseLeave={() => setHover(false)}
@@ -106,13 +132,22 @@ const ProductInner: FC<ProductProps> = ({
         >
             <Image preview={false} className={`md:w-[335px] md:h-[335px] w-[100px] h-[100px] object-cover transition-all duration-1000 ease-out ${hover && 'scale-110'}`} onError={() => setShowImage(images.demoMenth)} src={showImage} />
             <div className={`${hover ? 'top-2 opacity-100' : 'top-5 opacity-0'} transition-all duration-300 ease-in-out absolute right-2 flex flex-col gap-y-3`}>
-                <Tooltip placement="left" title="Thêm vào wishlist">
+                {hasWishlist ? <Tooltip placement="left" title="Xóa khỏi wishlist">
                     <button
+                        onClick={() => handleRemoveWishlist()}
+                        onMouseLeave={() => setHoverHeart(false)}
+                        onMouseOver={() => setHoverHeart(true)} className={`${hoverHeart ? 'bg-black text-white' : 'bg-white text-black'} transition-all duration-300 p-2 w-10 h-10 flex justify-center items-center rounded-md`}>
+                        <FontAwesomeIcon icon={faRemove} />
+                    </button>
+                </Tooltip> : <Tooltip placement="left" title="Thêm vào wishlist">
+                    <button
+                        onClick={() => handleAddWishlist()}
                         onMouseLeave={() => setHoverHeart(false)}
                         onMouseOver={() => setHoverHeart(true)} className={`${hoverHeart ? 'bg-black text-white' : 'bg-white text-black'} transition-all duration-300 p-2 w-10 h-10 flex justify-center items-center rounded-md`}>
                         <FontAwesomeIcon icon={faHeart} />
                     </button>
-                </Tooltip>
+                </Tooltip>}
+
                 <Tooltip placement="left" title="Xem nhanh">
                     <button
                         onClick={showModal}

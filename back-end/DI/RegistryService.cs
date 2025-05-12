@@ -42,6 +42,7 @@ namespace back_end.DI
             services.AddScoped<IHienThiDanhGiaService, HienThiDanhGiaService>();
             services.AddScoped<IKhuyenMaiService, KhuyenMaiService>();
             services.AddScoped<IVaiTroService, VaiTroService>();
+            services.AddScoped<ISanPhamYeuThichService, SanPhamYeuThichService>();
             services.AddScoped<IThongBaoService, ThongBaoService>();
 
             services.AddScoped<IVnpayService, VnpayService>();

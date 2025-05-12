@@ -13,7 +13,6 @@ const Header: FC = () => {
             <Link to="/" className="text-lg">Trang chủ</Link>
             <Link to="/shop" className="text-lg">Cửa hàng</Link>
             <Link to="/blog" className="text-lg">Bài viết</Link>
-            <Link to='/contact' className="text-lg">Liên hệ</Link>
         </div>
         <NavbarRight />
         

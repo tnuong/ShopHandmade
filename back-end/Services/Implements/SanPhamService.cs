@@ -5,9 +5,12 @@ using back_end.Core.Responses;
 using back_end.Core.Responses.Resources;
 using back_end.Data;
 using back_end.Exceptions;
+using back_end.Extensions;
 using back_end.Infrastructures.Cloudinary;
 using back_end.Mappers;
 using back_end.Services.Interfaces;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 
@@ -18,12 +21,14 @@ namespace back_end.Services.Implements
         private readonly MyStoreDbContext dbContext;
         private readonly IUploadService uploadService;
         private readonly ApplicationMapper applicationMapper;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public SanPhamService(MyStoreDbContext dbContext, IUploadService uploadService, ApplicationMapper applicationMapper)
+        public SanPhamService(MyStoreDbContext dbContext, IUploadService uploadService, ApplicationMapper applicationMapper, IHttpContextAccessor contextAccessor)
         {
             this.dbContext = dbContext;
             this.uploadService = uploadService;
             this.applicationMapper = applicationMapper;
+            this.httpContextAccessor = contextAccessor;
         }
 
         public async Task UploadImages(int id, List<IFormFile> files)
@@ -165,6 +170,7 @@ namespace back_end.Services.Implements
                 .Take(pageSize)
                 .ToListAsync();
 
+            var userId = httpContextAccessor.HttpContext.User.GetUserId();
             var resources = new List<SanPhamResource>();
             foreach (var product in products) {
                 var promotions = await dbContext.SanPhamKhuyenMais
@@ -174,6 +180,9 @@ namespace back_end.Services.Implements
 
                 var promotionResources = promotions.Select(p => applicationMapper.MapToKhuyenMai(p.KhuyenMai)).ToList();
                 var productResource = applicationMapper.MapToProductResource(product);
+                productResource.HasWishlist = await dbContext.DanhSachYeuThichs
+                    .Include(s => s.DanhSachSanPham)
+                    .AnyAsync(s => s.MaNguoiDung == userId && s.DanhSachSanPham.Any(t => t.MaSanPham == product.MaSanPham));
                 productResource.Promotions = promotionResources;
                 resources.Add(productResource);
             }
@@ -211,8 +220,12 @@ namespace back_end.Services.Implements
                    .Where(p => p.MaSanPham == product.MaSanPham && p.KhuyenMai.TrangThai == PromotionStatus.ACTIVE && p.KhuyenMai.NgayKetThuc >= DateTime.Now.Date)
                    .ToListAsync();
 
+            var userId = httpContextAccessor.HttpContext.User.GetUserId();
             var resource = applicationMapper.MapToProductResource(product);
             resource.Promotions = promotions.Select(p => applicationMapper.MapToKhuyenMai(p.KhuyenMai)).ToList();
+            resource.HasWishlist = await dbContext.DanhSachYeuThichs
+                  .Include(s => s.DanhSachSanPham)
+                  .AnyAsync(s => s.MaNguoiDung == userId && s.DanhSachSanPham.Any(t => t.MaSanPham == product.MaSanPham));
 
             var response = new DataResponse<SanPhamResource>();
             response.Success = true;
@@ -370,6 +383,7 @@ namespace back_end.Services.Implements
                 .Take(8)
                 .ToListAsync();
 
+            var userId = httpContextAccessor.HttpContext.User.GetUserId();
             var resources = new List<SanPhamResource>();
             foreach (var productQuantity in productQuantities)
             {
@@ -381,6 +395,9 @@ namespace back_end.Services.Implements
                 var promotionResources = promotions.Select(p => applicationMapper.MapToKhuyenMai(p.KhuyenMai)).ToList();
                 var productResource = applicationMapper.MapToProductResource(productQuantity.Product);
                 productResource.Promotions = promotionResources;
+                productResource.HasWishlist = await dbContext.DanhSachYeuThichs
+                 .Include(s => s.DanhSachSanPham)
+                 .AnyAsync(s => s.MaNguoiDung == userId && s.DanhSachSanPham.Any(t => t.MaSanPham == productQuantity.Product.MaSanPham));
                 resources.Add(productResource);
             }
 
@@ -409,6 +426,7 @@ namespace back_end.Services.Implements
                 .Take(8)
                 .ToListAsync();
 
+            var userId = httpContextAccessor.HttpContext.User.GetUserId();
             var resources = new List<SanPhamResource>();
             foreach (var productQuantity in productQuantities)
             {
@@ -420,6 +438,9 @@ namespace back_end.Services.Implements
                 var promotionResources = promotions.Select(p => applicationMapper.MapToKhuyenMai(p.KhuyenMai)).ToList();
                 var productResource = applicationMapper.MapToProductResource(productQuantity.Product);
                 productResource.Promotions = promotionResources;
+                productResource.HasWishlist = await dbContext.DanhSachYeuThichs
+                 .Include(s => s.DanhSachSanPham)
+                 .AnyAsync(s => s.MaNguoiDung == userId && s.DanhSachSanPham.Any(t => t.MaSanPham == productQuantity.Product.MaSanPham));
                 resources.Add(productResource);
             }
 

@@ -3,7 +3,7 @@ import { RemoveImagesRequest } from '../areas/admin/pages/products/ProductDetail
 import { QueryParams } from '../areas/admin/pages/products/VariantManagement';
 import { ProductFilter } from '../areas/customers/pages/ShopPage';
 import axiosConfig from '../configuration/axiosConfig';
-import { DataResponse, PaginationResponse, ProductResource } from '../resources';
+import { BaseResponse, DataResponse, PaginationResponse, ProductResource } from '../resources';
 
 class ProductService {
 
@@ -101,6 +101,22 @@ class ProductService {
 
     removeProduct(id: number): Promise<void> {
         return axiosConfig.delete("/api/SanPham/" + id);
+    }
+
+    addWishlist(productId: number) : Promise<BaseResponse> {
+        return axiosConfig.put('/api/SanPham/danh-sach-yeu-thich/' + productId)
+    }
+
+    removeWishlist(productId: number) : Promise<BaseResponse> {
+        return axiosConfig.delete('/api/SanPham/danh-sach-yeu-thich/' + productId)
+    }
+
+    getWishlist(pageIndex: number, pageSize: number) : Promise<PaginationResponse<ProductResource[]>> {
+        return axiosConfig.get('/api/SanPham/danh-sach-yeu-thich', {
+            params: {
+                pageIndex, pageSize
+            }
+        })
     }
 }
 

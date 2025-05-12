@@ -14,6 +14,7 @@
         public NhaSanXuatResource Manufacturer { get; set; }
         public string Thumbnail { get; set; }
         public string ZoomImage { get; set; }
+        public bool HasWishlist { get; set; }
         public List<HinhAnhSanPhamResource> Images { get; set; }
         public List<KhuyenMaiResource> Promotions { get; set; } = new List<KhuyenMaiResource>();
     }

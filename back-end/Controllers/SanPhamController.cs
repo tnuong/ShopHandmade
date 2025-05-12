@@ -5,17 +5,20 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace back_end.Controllers
 {
-    [Authorize(Roles = "ADMIN")]
+    
     [Route("api/[controller]")]
     [ApiController]
     public class SanPhamController : ControllerBase
     {
         private readonly ISanPhamService productService;
+        private readonly ISanPhamYeuThichService yeuThichService;
 
-        public SanPhamController(ISanPhamService productService) {
+        public SanPhamController(ISanPhamService productService, ISanPhamYeuThichService sanPhamYeuThichService) {
             this.productService = productService;
+            this.yeuThichService = sanPhamYeuThichService;
         }
 
+        [Authorize(Roles = "ADMIN")]
         [HttpPost]
         public async Task<IActionResult> CreateProduct([FromForm] CreateProductRequest request)
         {
@@ -23,6 +26,7 @@ namespace back_end.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "ADMIN")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProduct([FromRoute] int id, [FromBody] EditProductRequest request)
         {
@@ -54,6 +58,7 @@ namespace back_end.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "ADMIN")]
         [HttpPut("upload/hinh-dai-dien/{id}")]
         public async Task<IActionResult> UpdateThumbnail([FromRoute] int id, [FromForm] UploadSingleFileRequest request)
         {
@@ -61,6 +66,7 @@ namespace back_end.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "ADMIN")]
         [HttpPut("upload/hinh-phong-to/{id}")]
         public async Task<IActionResult> UploadZoomImage([FromRoute] int id, [FromForm] UploadSingleFileRequest request)
         {
@@ -68,6 +74,7 @@ namespace back_end.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "ADMIN")]
         [HttpPut("upload/hinh-anh/{id}")]
         public async Task<IActionResult> UploadImages([FromRoute] int id, [FromForm] UploadFileRequest request)
         {
@@ -75,6 +82,7 @@ namespace back_end.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "ADMIN")]
         [HttpPut("xoa-hinh-anh")]
         public async Task<IActionResult> RemoveImages([FromBody] RemoveImageRequest request)
         {
@@ -110,11 +118,37 @@ namespace back_end.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "ADMIN")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveProduct([FromRoute] int id)
         {
             await productService.RemoveProduct(id);
             return NoContent();
+        }
+
+        [Authorize]
+        [HttpGet("danh-sach-yeu-thich")]
+        public async Task<IActionResult> GetWishlist([FromQuery] int pageIndex, [FromQuery] int pageSize)
+        {
+            var response = await yeuThichService.GetAllSanPham(pageIndex, pageSize);
+            return Ok(response);
+        }
+
+        [Authorize]
+        [HttpPut("danh-sach-yeu-thich/{maSanPham}")]
+        public async Task<IActionResult> AddWishlist([FromRoute] int maSanPham)
+        {
+            var response = await yeuThichService.AddSanPhamYeuThich(maSanPham);
+            return Ok(response);
+        }
+
+
+        [Authorize]
+        [HttpDelete("danh-sach-yeu-thich/{maSanPham}")]
+        public async Task<IActionResult> RemoveWishlist([FromRoute] int maSanPham)
+        {
+            var response = await yeuThichService.RemoveSanPhamYeuThich(maSanPham);
+            return Ok(response);
         }
     }
 }
