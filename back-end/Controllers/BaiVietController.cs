@@ -42,7 +42,7 @@ namespace back_end.Controllers
             return response;
         }
 
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "ADMIN, EMPLOYEE")]
         [HttpPost]
         [ProducesResponseType(200)]
         public async Task<BaseResponse> CreateBlog([FromForm] CreateBlogRequest request)
@@ -59,7 +59,7 @@ namespace back_end.Controllers
             return response;
         }
 
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "ADMIN, EMPLOYEE")]
         [HttpPut("{id}")]
         [ProducesResponseType(204)]
         public async Task UpdateBlog([FromRoute] int id, [FromForm] EditBlogRequest request)
@@ -67,7 +67,7 @@ namespace back_end.Controllers
             await blogService.UpdateBlog(id, request);
         }
 
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "ADMIN, EMPLOYEE")]
         [HttpPut("bai-viet-an/{id}")]
         [ProducesResponseType(204)]
         public async Task HiddenBlog([FromRoute] int id)
@@ -75,7 +75,7 @@ namespace back_end.Controllers
             await blogService.HiddenBlog(id);
         }
 
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "ADMIN, EMPLOYEE")]
         [HttpPut("hien-thi/{id}")]
         [ProducesResponseType(204)]
         public async Task ShowBlog([FromRoute] int id)
@@ -83,7 +83,7 @@ namespace back_end.Controllers
             await blogService.ShowBlog(id);
         }
 
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "ADMIN, EMPLOYEE")]
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
         public async Task DeleteBlog([FromRoute] int id)

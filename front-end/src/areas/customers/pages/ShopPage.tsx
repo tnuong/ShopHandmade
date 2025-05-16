@@ -93,7 +93,7 @@ const ShopPage: FC = () => {
         <div className="px-10 mt-6 flex flex-col gap-y-6">
             <div className="bg-slate-50 flex justify-between py-8 px-4">
                 <div className="flex gap-x-4">
-                    <FontAwesomeIcon className="hidden lg:block" icon={faSquare} />
+                    <span className="font-bold">Cửa hàng</span>
                     <Button className="block lg:hidden" onClick={showDrawer} icon={<FilterOutlined />} type="default">Bộ lọc</Button>
                 </div>
                 <div className="flex items-center gap-x-4">

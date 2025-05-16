@@ -15,6 +15,8 @@ import images from "../../../assets";
 import { PromotionType } from "../../../constants/PromotionType";
 import { faHeartBroken, faRemove } from "@fortawesome/free-solid-svg-icons";
 import productService from "../../../services/product-service";
+import { useSelector } from "react-redux";
+import { selectAuth } from "../../../feature/auth/authSlice";
 
 type ProductProps = {
     product: ProductResource
@@ -74,7 +76,11 @@ const ProductInner: FC<ProductProps> = ({
     const [selectVariant, setSelectVariant] = useState<VariantResource | null>(null);
     const [showImage, setShowImage] = useState(product.thumbnail);
     const { handleCancel, handleOk, isModalOpen, showModal } = useModal();
-    const [hasWishlist, setHasWishlist] = useState(product.hasWishlist)
+    const [hasWishlist, setHasWishlist] = useState(product.hasWishlist);
+
+    const { isAuthenticated } = useSelector(selectAuth)
+
+
 
     useEffect(() => {
         const fetchVariants = async () => {
@@ -104,7 +110,7 @@ const ProductInner: FC<ProductProps> = ({
     const handleAddWishlist = async () => {
         const response = await productService.addWishlist(product.id);
 
-        if(response.success) {
+        if (response.success) {
             message.success(response.message);
             setHasWishlist(true)
         } else {
@@ -112,10 +118,10 @@ const ProductInner: FC<ProductProps> = ({
         }
     }
 
-     const handleRemoveWishlist = async () => {
+    const handleRemoveWishlist = async () => {
         const response = await productService.removeWishlist(product.id);
 
-        if(response.success) {
+        if (response.success) {
             message.success(response.message);
             setHasWishlist(false)
         } else {
@@ -130,9 +136,10 @@ const ProductInner: FC<ProductProps> = ({
             onMouseOver={() => setHover(true)}
             className="relative overflow-hidden"
         >
-            <Image preview={false} className={`md:w-[335px] md:h-[335px] w-[100px] h-[100px] object-cover transition-all duration-1000 ease-out ${hover && 'scale-110'}`} onError={() => setShowImage(images.demoMenth)} src={showImage} />
+            <Image preview={false} width={'100%'} rootClassName='overflow-hidden' height={'100%'} className={`rounded-md aspect-square object-cover transition-all duration-1000 ease-out ${hover && 'scale-110'}`} onError={() => setShowImage(images.demoMenth)} src={showImage} />
+
             <div className={`${hover ? 'top-2 opacity-100' : 'top-5 opacity-0'} transition-all duration-300 ease-in-out absolute right-2 flex flex-col gap-y-3`}>
-                {hasWishlist ? <Tooltip placement="left" title="Xóa khỏi wishlist">
+                {isAuthenticated && (hasWishlist ? <Tooltip placement="left" title="Xóa khỏi wishlist">
                     <button
                         onClick={() => handleRemoveWishlist()}
                         onMouseLeave={() => setHoverHeart(false)}
@@ -146,7 +153,7 @@ const ProductInner: FC<ProductProps> = ({
                         onMouseOver={() => setHoverHeart(true)} className={`${hoverHeart ? 'bg-black text-white' : 'bg-white text-black'} transition-all duration-300 p-2 w-10 h-10 flex justify-center items-center rounded-md`}>
                         <FontAwesomeIcon icon={faHeart} />
                     </button>
-                </Tooltip>}
+                </Tooltip>)}
 
                 <Tooltip placement="left" title="Xem nhanh">
                     <button
@@ -157,7 +164,10 @@ const ProductInner: FC<ProductProps> = ({
                     </button>
                 </Tooltip>
             </div>
-            {product.quantity > 0 && <button onClick={showModal} className={`${hover ? 'bottom-[0px] opacity-100' : '-bottom-10 opacity-0'} transition-all duration-500 ease-in-out flex items-center justify-center text-white text-[16px] py-2 gap-x-2 absolute left-0 right-0 bg-primary`}>
+
+
+
+            {product.quantity > 0 && <button onClick={showModal} className={`${hover ? 'bottom-[8px] opacity-100' : '-bottom-10 opacity-0'} transition-all duration-500 ease-in-out flex items-center justify-center text-white text-[16px] py-2 gap-x-2 absolute left-0 right-0 bg-primary`}>
                 <ShoppingCartOutlined />
                 <span>+ Thêm vào giỏ hàng</span>
             </button>}
@@ -171,9 +181,14 @@ const ProductInner: FC<ProductProps> = ({
             </div>
             <div className="flex gap-x-3">
                 {variants.map(variant => <Tooltip key={variant.id} title={variant.color.name}>
-                    <button onClick={() => handleSelectVariant(variant)} style={{
-                        backgroundColor: variant.color.hexCode
-                    }} className="cursor-pointer w-5 h-5 border-[1px] border-gray-300 rounded-full"></button>
+                    <button
+                        onClick={() => handleSelectVariant(variant)}
+                        style={{
+                            backgroundColor: variant.color.hexCode
+                        }}
+                        className="cursor-pointer w-5 h-5 border-[1px] border-gray-300 rounded-full"
+                    >
+                    </button>
                 </Tooltip>)}
 
             </div>

@@ -31,6 +31,7 @@ const authSlice = createSlice({
         },
         signOut: (state) => {
             localStorage.removeItem('accessToken')
+            localStorage.removeItem('cart')
             state.user = undefined
             state.accessToken = undefined
         },

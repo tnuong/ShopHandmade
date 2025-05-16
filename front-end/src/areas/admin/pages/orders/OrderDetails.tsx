@@ -62,15 +62,15 @@ const OrderDetails: FC = () => {
                     <div className="flex flex-col gap-y-1">
                         <div className="flex items-center justify-between">
                             <span>Thành tiền</span>
-                            <span>{formatCurrencyVND(order?.totalPrice)}</span>
+                            <span>{formatCurrencyVND(order?.totalPriceBeforeDiscount)}</span>
                         </div>
                         <div className="flex items-center justify-between">
-                            <span>Phí ship</span>
-                            <span>{formatCurrencyVND(0)}</span>
+                            <span>Đã trừ</span>
+                            <span>-{formatCurrencyVND(order?.totalDiscount)}</span>
                         </div>
                         <div className="text-lg font-semibold flex items-center justify-between">
                             <span>Tổng tiền</span>
-                            <span>{formatCurrencyVND(order?.totalPrice)}</span>
+                            <span>{formatCurrencyVND(order?.totalPriceAfterDiscount)}</span>
                         </div>
                     </div>
                 </CardBorder>

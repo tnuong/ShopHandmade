@@ -8,9 +8,9 @@ using back_end.Services.Interfaces;
 using FirebaseAdmin.Messaging;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
-using back_end.Infrastructures.FCM;
 using back_end.Infrastructures.Cloudinary;
 using back_end.Infrastructures.JsonWebToken;
+using back_end.Infrastructures.OneSignal;
 
 
 namespace back_end.DI
@@ -50,7 +50,7 @@ namespace back_end.DI
 
             services.AddScoped<ITinNhanService, TinNhanService>();
             services.AddScoped<INhomChatService, NhomChatService>();
-            services.AddScoped<IFcmService, FcmService>();
+            services.AddScoped<OnesignalService, OnesignalService>();
 
             services.AddSingleton<PresenceTracker>();
 

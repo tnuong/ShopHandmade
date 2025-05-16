@@ -142,8 +142,12 @@ const router = createBrowserRouter([
         } />,
         children: [
             {
+                path: '',
+                element: <Dashboard />,
+            },
+            {
                 path: 'dashboard',
-                element: <RoleBasedGuard accessibleRoles={['ADMIN']} element={<Dashboard />} />,
+                element: <Dashboard />,
             },
             {
                 path: 'product',
@@ -203,7 +207,7 @@ const router = createBrowserRouter([
             },
             {
                 path: 'blog',
-                element: <RoleBasedGuard accessibleRoles={['ADMIN']} element={<BlogManagement />} />,
+                element: <BlogManagement />,
             },
             {
                 path: 'blog/create',

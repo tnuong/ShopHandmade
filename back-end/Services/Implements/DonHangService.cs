@@ -7,7 +7,7 @@ using back_end.Data;
 using back_end.Exceptions;
 using back_end.Extensions;
 using back_end.Helpers;
-using back_end.Infrastructures.FCM;
+using back_end.Infrastructures.OneSignal;
 using back_end.Infrastructures.SignalR;
 using back_end.Mappers;
 using back_end.Services.Interfaces;
@@ -25,22 +25,22 @@ namespace back_end.Services.Implements
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly PaypalClient _paypalClient;
         private readonly IConfiguration _configuration;
-        private readonly IFcmService fcmService;
         private readonly UserManager<NguoiDung> _userManager;
         private readonly PresenceTracker presenceTracker;
         private readonly IHubContext<ServerHub> hubContext;
+        private readonly OnesignalService onesignalService;
 
-        public DonHangService(MyStoreDbContext dbContext, IHttpContextAccessor httpContextAccessor, ApplicationMapper mapper, PaypalClient paypalClient, IConfiguration configuration, IFcmService fcmService, UserManager<NguoiDung> userManager, PresenceTracker presenceTracker, IHubContext<ServerHub> hubContext)
+        public DonHangService(MyStoreDbContext dbContext, OnesignalService onesignalService, IHttpContextAccessor httpContextAccessor, ApplicationMapper mapper, PaypalClient paypalClient, IConfiguration configuration, UserManager<NguoiDung> userManager, PresenceTracker presenceTracker, IHubContext<ServerHub> hubContext)
         {
             this.dbContext = dbContext;
             _httpContextAccessor = httpContextAccessor;
             applicationMapper = mapper;
             _paypalClient = paypalClient;
             _configuration = configuration;
-            this.fcmService = fcmService;
             _userManager = userManager;
             this.presenceTracker = presenceTracker;
             this.hubContext = hubContext;
+            this.onesignalService = onesignalService;
         }
 
         public async Task<BaseResponse> CreateOrder(OrderRequest request)
@@ -148,7 +148,7 @@ namespace back_end.Services.Implements
             
             foreach(var admin in adminUsers)
             {
-                await fcmService.SendNotification(
+                await onesignalService.SendNotification(
                     "Đơn hàng mới",
                     $"{fullName} đã đặt một đơn hàng mới",
                     admin.Id,
@@ -322,7 +322,7 @@ namespace back_end.Services.Implements
                     GhiChu = "Đơn hàng đã được tiếp nhận và đang trong quá trình xử lí",
                 });
                 await dbContext.SaveChangesAsync();
-                await fcmService.SendNotification("Thông báo mới", $"Đơn hàng {order.MaDonHang} của bạn đã được tiếp nhận", order.MaNguoiDung, order.MaDonHang, NotificationType.ORDER);
+                await onesignalService.SendNotification("Thông báo mới", $"Đơn hàng {order.MaDonHang} của bạn đã được tiếp nhận", order.MaNguoiDung, order.MaDonHang, NotificationType.ORDER);
             }
             else throw new Exception("Cập nhật đơn hàng thất bại");
             
@@ -356,7 +356,7 @@ namespace back_end.Services.Implements
                 }
 
                 await dbContext.SaveChangesAsync();
-                await fcmService.SendNotification("Thông báo mới", $"Đơn hàng {order.MaDonHang} của bạn đã bị từ chối", order.MaNguoiDung, order.MaDonHang, NotificationType.ORDER);
+                await onesignalService.SendNotification("Thông báo mới", $"Đơn hàng {order.MaDonHang} của bạn đã bị từ chối", order.MaNguoiDung, order.MaDonHang, NotificationType.ORDER);
             }
             else throw new Exception("Cập nhật đơn hàng thất bại");
         }
@@ -380,7 +380,7 @@ namespace back_end.Services.Implements
                     GhiChu = "Đơn hàng đang được vận chuyển tới địa chỉ của bạn",
                 });
                 await dbContext.SaveChangesAsync();
-                await fcmService.SendNotification("Thông báo mới", $"Đơn hàng {order.MaDonHang} của bạn đã bắt đầu vận chuyển", order.MaNguoiDung, order.MaDonHang, NotificationType.ORDER);
+                await onesignalService.SendNotification("Thông báo mới", $"Đơn hàng {order.MaDonHang} của bạn đã bắt đầu vận chuyển", order.MaNguoiDung, order.MaDonHang, NotificationType.ORDER);
             }
             else throw new Exception("Cập nhật đơn hàng thất bại");
         }
@@ -408,7 +408,7 @@ namespace back_end.Services.Implements
                     GhiChu = "Đơn hàng đã được giao tới địa chỉ của bạn",
                 });
                 await dbContext.SaveChangesAsync();
-                await fcmService.SendNotification("Thông báo mới", $"Đơn hàng {order.MaDonHang} của bạn đã được giao thành công", order.MaNguoiDung, order.MaDonHang, NotificationType.ORDER);
+                await onesignalService.SendNotification("Thông báo mới", $"Đơn hàng {order.MaDonHang} của bạn đã được giao thành công", order.MaNguoiDung, order.MaDonHang, NotificationType.ORDER);
             }
             else throw new Exception("Cập nhật đơn hàng thất bại");
         }
@@ -438,7 +438,7 @@ namespace back_end.Services.Implements
                     GhiChu = "Đơn hàng đã bị khách hàng hủy đơn",
                 });
                 await dbContext.SaveChangesAsync();
-                await fcmService.SendNotification("Thông báo mới", $"Đơn hàng {order.MaDonHang} của bạn đã được tiếp nhận", order.MaNguoiDung, order.MaDonHang, NotificationType.ORDER);
+                await onesignalService.SendNotification("Thông báo mới", $"Đơn hàng {order.MaDonHang} của bạn đã được tiếp nhận", order.MaNguoiDung, order.MaDonHang, NotificationType.ORDER);
             }
             else throw new Exception("Cập nhật đơn hàng thất bại");
         }
@@ -468,7 +468,7 @@ namespace back_end.Services.Implements
                     GhiChu = "Khách hàng đã xác nhận được đơn hàng",
                 });
                 await dbContext.SaveChangesAsync();
-                await fcmService.SendNotification("Thông báo mới", $"Đơn hàng {order.MaDonHang} của bạn đã được tiếp nhận", order.MaNguoiDung, order.MaDonHang, NotificationType.ORDER);
+                await onesignalService.SendNotification("Thông báo mới", $"Đơn hàng {order.MaDonHang} của bạn đã được tiếp nhận", order.MaNguoiDung, order.MaDonHang, NotificationType.ORDER);
             }
             else throw new Exception("Cập nhật đơn hàng thất bại");
         }

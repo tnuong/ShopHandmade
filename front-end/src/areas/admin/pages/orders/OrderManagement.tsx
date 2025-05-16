@@ -39,6 +39,7 @@ const OrderManagement: FC = () => {
 
 
     const getStatusItems = (status: OrderStatusType, id: number): MenuProps['items'] => {
+       
         if (status === OrderStatus.CANCELLED || status === OrderStatus.REJECTED || status === OrderStatus.COMPLETED || status === OrderStatus.DELIVERED)
             return undefined;
 
@@ -68,12 +69,13 @@ const OrderManagement: FC = () => {
                 key: OrderStatus.DELIVERED,
                 label: <button onClick={() => updateStatusOrder(orderService.updateDelivered, id)}>{getOrderStatusBtn(OrderStatus.DELIVERED)}</button>
             }]
+        
     }
 
     const updateStatusOrder = async (callback: (id: number) => Promise<BaseResponse>, id: number) => {
+         setOrderId(id)
         try {
             setLoading(true)
-            setOrderId(id)
             const response = await callback(id);
             setLoading(false)
             message.success('Cập nhật trạng thái đơn hàng thành công')
@@ -83,7 +85,6 @@ const OrderManagement: FC = () => {
             message.error('Cập nhật đơn hàng thất bại');
         }
     };
-
 
     const columns: TableProps<OrderResource>['columns'] = [
         {
@@ -131,7 +132,7 @@ const OrderManagement: FC = () => {
                             <button disabled className="cursor-default">{getOrderStatusTag(orderStatus as OrderStatusType)}</button> :
                             <Tooltip placement="top" title='Ấn vào để thay đổi trạng thái'>
                                 <button className="cursor-pointer">{
-                                    loading ? 'Đang xử lí...' : getOrderStatusTag(orderStatus as OrderStatusType)
+                                    (loading && orderId === id) ? 'Đang xử lí...' : getOrderStatusTag(orderStatus as OrderStatusType)
                                 }</button>
                             </Tooltip>
                     }

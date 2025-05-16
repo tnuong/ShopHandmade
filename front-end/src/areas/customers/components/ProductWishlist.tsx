@@ -44,7 +44,7 @@ const ProductWishlist: FC<ProductWishlistProp> = ({
             onMouseOver={() => setHover(true)}
             className="relative overflow-hidden"
         >
-            <Image preview={false} className={`md:w-[335px] md:h-[335px] w-[100px] h-[100px] object-cover transition-all duration-1000 ease-out ${hover && 'scale-110'}`} onError={() => setShowImage(images.demoMenth)} src={showImage} />
+            <Image preview={false} width={'100%'} height={'100%'} rootClassName="overflow-hidden" className={`aspect-square rounded-md object-cover transition-all duration-1000 ease-out ${hover && 'scale-110'}`} onError={() => setShowImage(images.demoMenth)} src={showImage} />
             <div className={`${hover ? 'top-2 opacity-100' : 'top-5 opacity-0'} transition-all duration-300 ease-in-out absolute right-2 flex flex-col gap-y-3`}>
                 <Tooltip placement="left" title="Xóa khỏi wishlist">
                     <button

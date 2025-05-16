@@ -5,7 +5,7 @@ import NavbarRight from "./NavbarRight";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 
-const Header: FC = () => { 
+const Header: FC = () => {
     return <div className={`flex items-center justify-between bg-white px-10 shadow-sm min-h-24`}>
         <FontAwesomeIcon className="block lg:hidden text-2xl" icon={faBars} />
         <Logo />
@@ -15,7 +15,7 @@ const Header: FC = () => {
             <Link to="/blog" className="text-lg">Bài viết</Link>
         </div>
         <NavbarRight />
-        
+
     </div>
 };
 

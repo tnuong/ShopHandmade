@@ -38,7 +38,6 @@ export const getMenuItemsByRoles = (roles: string[]): MenuItem[] => {
             children.push(
                 { key: "1", label: <Link to="/admin/promotion">Khuyến mại</Link> },
                 { key: "2", label: <Link to="/admin/manufacturer">Nhà sản xuất</Link> },
-                { key: "3", label: <Link to="/admin/supplier">Nhà cung cấp</Link> },
                 { key: "4", label: <Link to="/admin/category">Danh mục</Link> },
                 { key: "5", label: <Link to="/admin/brand">Nhãn hiệu</Link> },
                 { key: "7", label: <Link to="/admin/purchase">Nhập hàng</Link> },

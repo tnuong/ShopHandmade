@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace back_end.Controllers
 {
-    [Authorize(Roles = "ADMIN")]
+    [Authorize(Roles = "ADMIN, EMPLOYEE")]
     [Route("api/[controller]")]
     [ApiController]
     public class BaoCaoThongKeController : ControllerBase

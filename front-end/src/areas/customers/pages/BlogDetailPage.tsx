@@ -74,8 +74,6 @@ const BlogDetailPage: FC = () => {
                             <span>{formatDateTime(new Date(blog?.createdDate!))}</span>
                         </div>
                     </div>
-                    <Button shape="circle" className="rotate-90" icon={<MoreOutlined />}>
-                    </Button>
                 </div>
                 {blog && <div
                     className="prose w-full"

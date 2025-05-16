@@ -1,7 +1,6 @@
-import { faFacebook, faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useGoogleLogin } from "@react-oauth/google";
-import FacebookLogin from '@greatsumini/react-facebook-login';
 import { Button, Divider, Form, FormProps, Input, Modal, message } from "antd";
 import { FC } from "react";
 import { useDispatch } from "react-redux";
@@ -10,7 +9,6 @@ import authService from "../../../../services/auth-service";
 import { signIn } from "../../../../feature/auth/authSlice";
 import useModal from "../../../../hooks/useModal";
 import ForgotPasswordModal from "./ForgotPasswordModal";
-import deviceTokenService from "../../../../services/device-token-service";
 
 
 export type SignInRequest = {
@@ -32,14 +30,6 @@ export type GoogleAuthorizeType = {
     accessToken: string;
 }
 
-const handleSaveToken = async () => {
-    const fcmToken = localStorage.getItem('fcmToken')
-
-    if(fcmToken) {
-        await deviceTokenService.saveToken(JSON.parse(fcmToken))
-    }
-}
-
 
 const LoginModal: FC<LoginModalProps> = ({
     handleOk
@@ -56,7 +46,6 @@ const LoginModal: FC<LoginModalProps> = ({
             if (response.success) {
                 message.success(response.message)
                 dispatch(signIn(response.data))
-                handleSaveToken()
                 handleOk()
             } else message.error(response.message)
         },
@@ -71,7 +60,6 @@ const LoginModal: FC<LoginModalProps> = ({
         if (response.success) {
             message.success(response.message)
             dispatch(signIn(response.data))
-            handleSaveToken()
             handleOk()
         } else message.error(response.message)
     };

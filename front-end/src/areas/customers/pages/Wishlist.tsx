@@ -29,7 +29,7 @@ const Wishlist: FC = () => {
         fetchProducts(1, 8)
     }, [])
 
-    return <div className="max-w-screen-xl w-full mx-auto flex flex-col items-start md:items-center gap-y-8">
+    return <div className="max-w-screen-xl w-full mx-auto flex flex-col items-start md:items-center gap-y-8 mt-4">
        
         {loading ? <GridProductSkeleton /> : <div className="grid grid-cols-4 gap-8">
             {products?.map(product => <ProductWishlist onFetch={() => fetchProducts(pagination?.pageIndex ?? 1, pagination?.pageSize ?? 8)} key={product.id} product={product} />)}

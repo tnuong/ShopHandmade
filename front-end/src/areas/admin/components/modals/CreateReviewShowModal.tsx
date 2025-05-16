@@ -65,6 +65,7 @@ const CreateReviewShowModal: FC<CreateReviewShowModalProps> = ({
                 }]}
             >
                 <Select
+                    placeholder='Chọn đánh giá'
                     size="large"
                     defaultValue={0}
                     mode="multiple"
