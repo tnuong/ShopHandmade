@@ -86,7 +86,7 @@ const AccountManagement: FC = () => {
             key: 'name',
         },
         {
-            title: 'Username',
+            title: 'Tên đăng nhập',
             dataIndex: 'username',
             key: 'username',
         },

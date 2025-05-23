@@ -26,6 +26,15 @@ namespace back_end.Controllers
             return response;
         }
 
+        [HttpGet("bai-viet-moi")]
+        [ProducesResponseType(200)]
+        public async Task<BaseResponse> GetMostRecentPosts([FromRoute] int pageIndex = 1, [FromRoute] int pageSize = 3)
+        {
+            var response = await blogService.GetAllBlogs(pageIndex, pageSize);
+            return response;
+        }
+       
+
         [HttpGet("lien-quan/{maNguoiDung}/{maBaiViet}")]
         [ProducesResponseType(200)]
         public async Task<BaseResponse> GetAllBlogsRelatedUser([FromRoute] string maNguoiDung, [FromRoute] int maBaiViet)

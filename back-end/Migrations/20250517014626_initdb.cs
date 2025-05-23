@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace back_end.Migrations
 {
     /// <inheritdoc />
-    public partial class initDB : Migration
+    public partial class initdb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -760,22 +760,22 @@ namespace back_end.Migrations
             migrationBuilder.InsertData(
                 table: "NguoiDungs",
                 columns: new[] { "Id", "SoLanDangNhapThatBai", "MaDongBo", "Email", "XacThucEmail", "HinhAnhBia", "HinhDaiDien", "HoVaTen", "ChoPhepKhoa", "ThoiGianKhoa", "NgayTao", "EmailChuanHoa", "TenDangNhapChuanHoa", "MatKhauMaHoa", "SoDienThoai", "XacThucSoDienThoai", "MaBaoMat", "ThoiGianHoatDongGanDay", "TrangThaiHoatDong", "TrangThaiKhoa", "KichHoat2Lop", "TenDangNhap" },
-                values: new object[] { "aec038d4-4b01-4088-93ac-fc79bed54d8d", 0, "8407953d-7070-40ec-966c-dfe1152bed40", "admin@gmail.com", true, null, null, "Thanh Nương", false, null, new DateTime(2025, 5, 8, 22, 16, 8, 194, DateTimeKind.Local).AddTicks(2655), "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAEAACcQAAAAEIc1ShpzvS4TC04B4Edx4IHCKNtRW1wQV905Wad2Oi8qIeDCpjkODwkJi+Vd/S9G7Q==", "0123456789", false, "97c6bd48-dbe6-41ae-adc9-1247707fbb09", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, false, "admin" });
+                values: new object[] { "6da79932-5ac6-4975-9298-cdd60c15b17e", 0, "a7237b3c-2a4c-4631-b954-868ac1ecd4bb", "admin@gmail.com", true, null, null, "Thanh Nương", false, null, new DateTime(2025, 5, 17, 8, 46, 26, 446, DateTimeKind.Local).AddTicks(6514), "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAEAACcQAAAAEFi3neF5YSQnPqnjXb2QOn+1TqINqJJpRzcPW3auUsdeg3/M7MOtlwjLEqsJnET3WA==", "0123456789", false, "690311ec-5933-4985-aeb4-786cfaf95a04", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, false, "admin" });
 
             migrationBuilder.InsertData(
                 table: "VaiTros",
                 columns: new[] { "MaVaiTro", "MaDongBo", "TenVaiTro", "TenVaiTroChuanHoa" },
                 values: new object[,]
                 {
-                    { "6cc53e84-6847-48da-a787-7a32b7c2cf76", "1", "EMPLOYEE", "EMPLOYEE" },
-                    { "8088491f-213a-420d-a11e-feb4f2788552", "1", "CUSTOMER", "CUSTOMER" },
-                    { "b2b67bf7-8bae-447b-b293-dd638bea387b", "1", "ADMIN", "ADMIN" }
+                    { "c958449b-6abc-48cc-8f13-39a9d4ec9ad5", "1", "EMPLOYEE", "EMPLOYEE" },
+                    { "de03b0e4-d35e-4312-9c38-e1b125aa4926", "1", "ADMIN", "ADMIN" },
+                    { "ff183039-1c37-4e90-9cf7-be8724dd7544", "1", "CUSTOMER", "CUSTOMER" }
                 });
 
             migrationBuilder.InsertData(
                 table: "NguoiDungVaiTros",
                 columns: new[] { "MaVaiTro", "MaNguoiDung" },
-                values: new object[] { "b2b67bf7-8bae-447b-b293-dd638bea387b", "aec038d4-4b01-4088-93ac-fc79bed54d8d" });
+                values: new object[] { "de03b0e4-d35e-4312-9c38-e1b125aa4926", "6da79932-5ac6-4975-9298-cdd60c15b17e" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_BaiViets_MaTacGia",

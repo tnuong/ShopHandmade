@@ -17,8 +17,8 @@ const ProductLayout: FC = () => {
 
     }
 
-    return <div onScroll={handleScroll} className="flex flex-col h-screen overflow-y-auto">
-        <HeaderFadeIn fixed={fixed} />
+    return <div onScroll={handleScroll} className="relative flex flex-col h-screen overflow-y-auto">
+        {/* <HeaderFadeIn fixed={fixed} /> */}
         <Header />
         <Outlet />
         <Footer />

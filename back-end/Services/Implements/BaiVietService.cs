@@ -81,6 +81,29 @@ namespace back_end.Services.Implements
             return response;
         }
 
+        public async Task<BaseResponse> GetAllBlogs(int pageIndex, int pageSize)
+        {
+            var blogs = await dbContext.BaiViets
+                .Where(b => !b.TrangThaiXoa)
+                .Include(b => b.TacGia)
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .OrderByDescending(b => b.NgayTao)
+                .ToListAsync();
+
+            var resources = blogs.Select(blog => applicationMapper.MapToBlogResource(blog)).ToList();
+
+            var response = new DataResponse<List<BaiVietResource>>()
+            {
+                Data = resources,
+                Message = "Lấy tất cả bài viết thành công",
+                Success = true,
+                StatusCode = System.Net.HttpStatusCode.OK
+            };
+
+            return response;
+        }
+
         public async Task<BaseResponse> GetAllBlogsExceptCurrentBlog(int blogId)
         {
             var blogs = await dbContext.BaiViets

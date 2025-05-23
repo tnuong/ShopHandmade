@@ -8,6 +8,7 @@ namespace back_end.Services.Interfaces
         Task<BaseResponse> CreateBlog(CreateBlogRequest request);
         Task UpdateBlog(int id, EditBlogRequest request);
         Task<BaseResponse> GetAllBlogs();
+        Task<BaseResponse> GetAllBlogs(int pageIndex, int pageSize);
         Task<BaseResponse> GetAllBlogsRelatedUser(string userId, int blogId);
         Task<BaseResponse> GetAllBlogsExceptCurrentBlog(int blogId);
         Task<BaseResponse> GetBlogById(int id);

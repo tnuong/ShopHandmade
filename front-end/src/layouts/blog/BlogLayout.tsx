@@ -17,8 +17,8 @@ const BlogLayout: FC = () => {
         }
     }
 
-    return <div onScroll={handleScroll} className="h-screen overflow-y-auto bg-slate-50">
-        <HeaderFadeIn fixed={fixed} />
+    return <div onScroll={handleScroll} className="relative h-screen overflow-y-auto bg-slate-50">
+        {/* <HeaderFadeIn fixed={fixed} /> */}
         <Header />
 
         <div className="w-full max-w-screen-lg mx-auto">

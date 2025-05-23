@@ -11,13 +11,13 @@ const ShopNow: FC = () => {
                 height="100%"
                 className="object-cover"
                 title="My video"
-                src="https://www.youtube.com/embed/fYMdlUjQNCQ?controls=0&autoplay=1&mute=1&modestbranding=1&showinfo=0&rel=0&disablekb=1"
+                src="https://www.youtube.com/embed/5BXZAkkeDV4"
             >
             </iframe>
         </div>
         <div className="p-12 flex flex-col gap-y-6 justify-center items-start bg-slate-100">
-            <p className="font-semibold text-5xl">Your homemade</p>
-            <p className="text-[17px]">Select next day delivery & add a personal gift message at checkout. Our studio team will handwrite your note on our beautiful gift card for an extra special touch!</p>
+            <p className="font-semibold text-5xl">HANDMADE</p>
+            <p className="text-[17px]">Chọn giao hàng vào ngày hôm sau và thêm lời nhắn quà tặng cá nhân khi thanh toán. Đội ngũ studio của chúng tôi sẽ viết tay lời nhắn của bạn lên thiệp quà tặng xinh đẹp, tạo nên một điểm nhấn đặc biệt!</p>
             <Link to='/shop'>
                 <button className="text-xl px-4 py-2 rounded-lg bg-orange-400 text-white">SHOP NOW</button>
             </Link>

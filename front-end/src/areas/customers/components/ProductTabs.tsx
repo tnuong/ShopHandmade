@@ -19,6 +19,7 @@ const ProductTabs: FC = () => {
             pageIndex: 1,
             pageSize: 8
         } as ProductFilter);
+        console.log(response)
 
         setLoading(false)
         setProducts(response.data)
@@ -36,6 +37,7 @@ const ProductTabs: FC = () => {
     const fetchTopBestSellerProducts = async () => {
         setLoading(true)
         const response = await productService.getTopBestSellerProducts();
+        console.log(response)
         setTimeout(() => {
             setLoading(false)
             setProducts(response.data)

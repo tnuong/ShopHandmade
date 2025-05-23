@@ -75,9 +75,9 @@ const PersonalProfile: FC = () => {
                     <Form.Item<ProfileRequest>
                         label="Username"
                         name="username"
-                        rules={[{ required: true, message: 'Vui lòng nhập username!' }]}
+                        rules={[{ required: true, message: 'Vui lòng nhập tên đăng nhập!' }]}
                     >
-                        <Input placeholder="Nhập username" size="large" />
+                        <Input placeholder="Nhập tên đăng nhập" size="large" />
                     </Form.Item>
                     <Form.Item<ProfileRequest>
                         label="Địa chỉ email"

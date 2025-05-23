@@ -1,102 +1,108 @@
-import { FC, useState } from "react";
-import Logo from "../../areas/shared/Logo";
+import { useState } from "react";
+import { FaUser, FaHeart, FaShoppingCart, FaBars } from "react-icons/fa";
+import { Drawer, Modal, Button } from "antd";
 import { Link } from "react-router-dom";
-import NavbarRight from "../shared/NavbarRight";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
-import { Avatar, Button, Divider, Drawer, Modal, Popconfirm } from "antd";
-import { useDispatch, useSelector } from "react-redux";
-import { selectAuth, signOut } from "../../feature/auth/authSlice";
-import { AppDispatch } from "../../app/store";
-import useModal from "../../hooks/useModal";
-import AuthModal from "../../areas/customers/components/modals/AuthModal";
 
-export type ModalAuthType = 'login' | 'register' | 'forgot';
+const Header = () => {
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
 
-const Header: FC = () => {
-    const [open, setOpen] = useState(false);
-    const { isAuthenticated, user } = useSelector(selectAuth)
-    const dispatch = useDispatch<AppDispatch>()
-    const { handleCancel, handleOk, isModalOpen, showModal } = useModal();
-    const [modalAuthType, setModalAuthType] = useState<ModalAuthType>('login')
-
-    const handleLogout = () => {
-        dispatch(signOut())
-        handleOk()
-    }
-
-    const handleOpenPopup = (typeModal: ModalAuthType) => {
-        setModalAuthType(typeModal)
-        showModal()
-    }
-
-    const showDrawer = () => {
-        setOpen(true);
+    const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen);
+    const openModal = (mode: 'login' | 'register') => {
+        setAuthMode(mode);
+        setIsModalOpen(true);
     };
 
-    const onClose = () => {
-        setOpen(false);
-    };
+    return (
+        <header className="sticky top-0 w-full z-50">
+            {/* Topbar */}
+            {/* <div className="bg-[#14131A] text-white text-sm px-4 py-2 flex justify-between items-center">
+                <span className="flex items-center gap-1">
+                    🌟 MIỄN PHÍ VẬN CHUYỂN TẠI ĐÀ NẴNG CHO ĐƠN HÀNG TỪ 100.000VNĐ 🌟
+                </span>
+                <div className="flex gap-4">
+                    <span>MUA HÀNG NGAY ĐI NÀO 🌟</span>
 
+                </div>
+            </div> */}
 
-    const accountHeader = (): JSX.Element => {
-        return <div className="flex items-center gap-x-3 px-4">
-            <Avatar className="w-16 h-16" src={user?.avatar} size='large' />
-            <div className="flex flex-col">
-                <span className="font-semibold text-[16px]">{user?.name}</span>
-                <span className="text-[14px]">{user?.roles.includes('ADMIN') ? 'Quản trị viên' : 'Khách hàng'}</span>
+            {/* Main Header */}
+            <div className="bg-white flex justify-between items-center px-6 py-4 shadow-md relative">
+                {/* Hamburger menu for mobile */}
+                <FaBars
+                    className="text-xl md:hidden cursor-pointer"
+                    onClick={toggleDrawer}
+                />
+
+                {/* Logo */}
+                <div className="text-3xl font-bold">
+                    HAND<span className="text-red-500">MADE</span>
+                </div>
+
+                {/* Navbar */}
+                <nav className="hidden md:flex gap-8 text-lg font-semibold text-black">
+                    <Link to="/">TRANG CHỦ</Link>
+                    <Link to="/shop">CỬA HÀNG</Link>
+                    <Link to="/">KHUYẾN MÃI</Link>
+                    <Link to="/account/wishlist">YÊU THÍCH</Link>
+                    <Link to="/blog">BLOG</Link>
+                    <Link to="/">LIÊN HỆ</Link>
+                </nav>
+
+                {/* Icons */}
+                <div className="flex items-center gap-6 text-black text-lg relative">
+                    <FaUser className="cursor-pointer" onClick={() => openModal('login')} />
+                    <FaHeart className="cursor-pointer" />
+                    <div className="relative cursor-pointer">
+                        <FaShoppingCart />
+                        <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                            2
+                        </span>
+                    </div>
+                </div>
             </div>
-        </div>
-    }
 
-    return <div className={`z-10 flex items-center justify-between min-h-24`}>
-        <FontAwesomeIcon onClick={showDrawer} className="block lg:hidden text-2xl cursor-pointer" icon={faBars} />
-        <Logo />
-        <div className="lg:flex gap-x-8 hidden text-black font-semibold">
-            <Link to="/" className="text-lg">Trang chủ</Link>
-            <Link to="/shop" className="text-lg">Cửa hàng</Link>
-            <Link to="/blog" className="text-lg">Bài viết</Link>
-        </div>
-        <NavbarRight />
-
-        <Drawer placement="left" title={isAuthenticated ? accountHeader() : <Logo />} onClose={onClose} open={open}>
-            <div className="flex flex-col gap-y-4 text-black font-semibold">
-                <Link to="/" className="text-lg">Trang chủ</Link>
-                <Link to="/shop" className="text-lg">Cửa hàng</Link>
-                <Link to="/blog" className="text-lg">Bài viết</Link>
-            </div>
-            <Divider />
-            {isAuthenticated ? <Popconfirm
-                className="mt-4"
-                placement="bottom"
-                title={'Đăng xuất'}
-                description={'Bạn có chắc muốn đăng xuất không!'}
-                okText="Chắc chắn"
-                cancelText="Không, hủy bỏ"
-                onConfirm={() => handleLogout()}
+            {/* Drawer Menu (Mobile) */}
+            <Drawer
+                title="Menu"
+                placement="left"
+                onClose={toggleDrawer}
+                open={isDrawerOpen}
             >
-                <Button type="default">Đăng xuất</Button>
-            </Popconfirm> : <div className="flex gap-x-2">
-                <Button onClick={() => handleOpenPopup('login')} type="primary">Đăng nhập</Button>
-                <Button onClick={() => handleOpenPopup('register')} type="default">Đăng kí</Button>
-            </div>}
 
-        </Drawer>
+            </Drawer>
 
-        <Modal
-            open={isModalOpen}
-            onOk={handleOk}
-            onCancel={handleCancel}
-            style={{
-                top: 10
-            }}
-            width={modalAuthType === 'register' ? 700 : 500}
-            footer={[]}
-        >
-            <AuthModal modalType={modalAuthType} handleOk={handleOk} />
-        </Modal>
-    </div>
+            {/* Auth Modal */}
+            <Modal
+                open={isModalOpen}
+                onCancel={() => setIsModalOpen(false)}
+                footer={null}
+                centered
+                width={authMode === 'register' ? 600 : 400}
+            >
+                <div className="p-4">
+                    <h2 className="text-xl font-semibold mb-4">
+                        {authMode === 'login' ? 'Đăng nhập' : 'Đăng ký'}
+                    </h2>
+                    {/* Đây là phần form mô phỏng, bạn có thể thay bằng AuthModal thật */}
+                    <input
+                        type="text"
+                        placeholder="Email"
+                        className="w-full p-2 border mb-2 rounded"
+                    />
+                    <input
+                        type="password"
+                        placeholder="Mật khẩu"
+                        className="w-full p-2 border mb-2 rounded"
+                    />
+                    <Button type="primary" block>
+                        {authMode === 'login' ? 'Đăng nhập' : 'Đăng ký'}
+                    </Button>
+                </div>
+            </Modal>
+        </header>
+    );
 };
-
 
 export default Header;

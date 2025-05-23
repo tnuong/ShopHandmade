@@ -32,7 +32,7 @@ const OrderItem: FC<OrderItemProps> = ({
         </div>
 
         <div className="flex gap-x-3 items-center">
-            <span className="font-semibold text-[16px]">{formatCurrencyVND(orderItem.subTotal)}</span>
+            <span className="font-semibold text-[16px]">{formatCurrencyVND(orderItem.subTotalAfterDiscount)}</span>
         </div>
     </div>
 };

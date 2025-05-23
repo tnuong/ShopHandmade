@@ -10,6 +10,15 @@ class BlogService {
         return axiosConfig.get('/api/BaiViet')
     }
 
+    getMostRecentPosts(pageIndex: number, pageSize: number): Promise<DataResponse<BlogResource[]>> {
+        return axiosConfig.get('/api/BaiViet/bai-viet-moi', {
+            params: {
+                pageIndex,
+                pageSize
+            }
+        })
+    }
+
     getBlogById(id: number | string) : Promise<DataResponse<BlogResource>> {
         return axiosConfig.get('/api/BaiViet/' + id)
     }

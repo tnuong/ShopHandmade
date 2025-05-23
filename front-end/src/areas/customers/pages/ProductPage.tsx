@@ -7,6 +7,7 @@ import QuantityButton from "../components/QuantityButton";
 import Review from "../components/Review";
 import ReviewAnalytic from "../components/ReviewAnalytic";
 import { useParams } from "react-router-dom";
+
 import { ColorResource, ProductResource, ReportEvaluationResource, SizeResource, VariantResource } from "../../../resources";
 import productService from "../../../services/product-service";
 import variantService from "../../../services/variant-service";
@@ -111,7 +112,7 @@ const ProductImage: FC<ProductImageProps> = ({ product, selectedVariant }) => {
                     preview={{
                         mask: null
                     }}
-                    className="rounded-3xl aspect-square"
+                    className="rounded-3xl aspect-square object-cover"
                     width='100%'
                     height={'100%'}
                     src={selectedVariant?.thumbnailUrl ?? product?.thumbnail}
@@ -126,9 +127,9 @@ const ProductImage: FC<ProductImageProps> = ({ product, selectedVariant }) => {
                         preview={{
                             mask: null
                         }}
-                        className="rounded-3xl aspect-square"
-                        width='100%'
-                        height={'100%'}
+                        className="rounded-3xl aspect-square object-cover"
+                    width='100%'
+                    height={'100%'}
                         src={selectedVariant?.thumbnailUrl ?? product?.thumbnail}
                     />
                 </Badge.Ribbon>
@@ -231,12 +232,12 @@ const ProductPage: FC = () => {
     }
 
 
-    const items: TabsProps['items'] = [
-        {
-            key: '1',
-            label: 'Mô tả về sản phẩm',
-            children: product?.description,
-        },
+   const items: TabsProps['items'] = [
+    {
+        key: '1',
+        label: 'Thông tin về sản phẩm',
+        children: product?.description || "Chưa có mô tả cho sản phẩm này",
+    },
         {
             key: '2',
             label: 'Lượt đánh giá',
@@ -294,6 +295,11 @@ const ProductPage: FC = () => {
                 <div className="flex gap-x-4">
                     <span className="text-[17px] md:text-lg">Thể loại: <b>{product?.category.name}</b></span>
                     <span className="text-[17px] md:text-lg">Thương hiệu: <b>{product?.brand.name}</b></span>
+                </div>
+                { /*<p className="text-lg">{product?.description}</p> không cho hiện mô tả*/ }
+                <div className="flex gap-x-4 items-center">
+                    <Rate className="text-sm" disabled defaultValue={4} />
+                   { /* <span className="text-gray-600 font-semibold text-sm">2.3k+ review</span>*/ }
                 </div>
                 <div className="flex flex-col gap-y-1">
                     <span className="line-through text-gray-500 text-lg">

@@ -1,11 +1,12 @@
 import { FC, useState } from "react";
 import HeaderFadeIn from "../shared/HeaderFadeIn";
-import { Outlet } from "react-router-dom";
 import Header from "../shared/Header";
+import { Outlet } from "react-router-dom";
 import Footer from "../shared/Footer";
 
-const ShopLayout: FC = () => {
+const DiscountLayout: FC = () => {
     const [fixed, setFixed] = useState(false)
+
 
     const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
         const scrollTop = event.currentTarget.scrollTop;
@@ -14,15 +15,17 @@ const ShopLayout: FC = () => {
         } else if (scrollTop === 0) {
             setFixed(false)
         }
-
     }
 
-    return <div onScroll={handleScroll} className="relative flex flex-col h-screen overflow-y-auto">
+    return <div onScroll={handleScroll} className="relative h-screen overflow-y-auto bg-slate-50">
         {/* <HeaderFadeIn fixed={fixed} /> */}
         <Header />
-        <Outlet />
+
+        <div className="w-full max-w-screen-lg mx-auto">
+            <Outlet />
+        </div>
         <Footer />
-    </div>;
+    </div>
 };
 
-export default ShopLayout;
+export default DiscountLayout

@@ -28,6 +28,7 @@ function App() {
                 }
 
                 await OneSignal.Notifications.requestPermission();
+                console.log(OneSignal.Notifications.permission)
                 setEnable(OneSignal.Notifications.permission);
                 await OneSignal.Slidedown.promptPush();
                 OneSignal.Debug.setLogLevel('none');

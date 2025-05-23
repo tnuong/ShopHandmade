@@ -30,15 +30,15 @@ const AccountLayout: FC = () => {
         }
 
     }
-    return <div onScroll={handleScroll} className="flex flex-col h-screen overflow-y-auto">
-        <HeaderFadeIn fixed={fixed} />
+    return <div onScroll={handleScroll} className="relative flex flex-col h-screen overflow-y-auto">
+        {/* <HeaderFadeIn fixed={fixed} /> */}
         <Header />
         <div className="flex flex-col md:flex-row lg:px-10 lg:pt-10 gap-x-6">
             <Sidebar />
-            <div className="flex flex-col flex-1 px-4 lg:px-0 overflow-hidden">
+            <div className="flex flex-col flex-1 px-10 lg:px-0 overflow-hidden">
                 <Breadcrumb
                     separator=">"
-                    className="pt-6 text-[16px]"
+                    className="text-[16px]"
                     items={[
                         {
                             title: 'Trang chủ',

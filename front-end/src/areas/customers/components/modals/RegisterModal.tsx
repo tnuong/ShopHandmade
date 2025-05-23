@@ -55,11 +55,11 @@ const RegisterModal: FC<RegisterModalProps> = ({
                     <Input size="large" placeholder="Nhập họ và tên" />
                 </Form.Item>
                 <Form.Item<SignUpDataForm>
-                    label="Username"
+                    label="Tên đăng nhập"
                     name="username"
-                    rules={[{ required: true, message: 'Vui lòng nhập username!' }]}
+                    rules={[{ required: true, message: 'Vui lòng nhập tên đăng nhập!' }]}
                 >
-                    <Input size="large" placeholder="Nhập username" />
+                    <Input size="large" placeholder="Nhập tên đăng nhập" />
                 </Form.Item>
 
                 <Form.Item<SignUpDataForm>

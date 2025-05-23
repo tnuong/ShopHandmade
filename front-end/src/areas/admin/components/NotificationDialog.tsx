@@ -12,7 +12,7 @@ const NotificationDialog: FC<NotificationDialogProps> = ({
 }) => {
    
 
-    return <div className="flex flex-col gap-y-2 max-w-[400px] py-2 px-2 rounded-lg max-h-[500px] overflow-y-auto custom-scrollbar scrollbar-h-4">
+  return <div className="flex flex-col gap-y-2 max-w-[500px] py-2 px-2 rounded-lg max-h-[400px] overflow-y-auto custom-scrollbar scrollbar-h-4">
         <div>
             <span className="text-xl font-semibold">Thông báo của bạn</span>
         </div>

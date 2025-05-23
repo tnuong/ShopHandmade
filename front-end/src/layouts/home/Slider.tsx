@@ -50,7 +50,7 @@ const Slider: FC<SliderProps> = ({
         }} draggable ref={carouselRef} infinite={false}>
 
             {slideShows.map((slide, index) => <div key={slide.id}>
-                <div className="flex justify-start z-5 h-[90vh] relative" >
+                <div className="relative h-[90vh] pt-[80px]" >
                     <div className="absolute top-0 right-0 bottom-1/2 lg:bottom-0 left-0" style={{
                         margin: 0,
                         color: '#fff',

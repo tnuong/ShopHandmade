@@ -94,7 +94,7 @@ const CreateSlideShowModal: FC<CreateSlideShowProps> = ({
             </Form.Item>
 
             <Form.Item<CreateSlideShowRequest>
-                label="Tiêu đề nút"
+                label="Hình nền"
                 name="backgroundImage"
                 rules={[{ required: true, message: 'Chưa chọn hình nền nào!' }]}
             >

@@ -68,18 +68,18 @@ const CreateAccountModal: FC<CreateAccountModalProps> = ({
             </Form.Item>
 
             <Form.Item<AccountRequest>
-                label="Username"
+                label="Tên đăng nhập"
                 name='username'
                 rules={[
                     {
                         required: true,
-                        message: 'Username không được để trống'
+                        message: 'Tên đăng nhập không được để trống'
                     }
                 ]}
             >
                 <Input
                     size="large"
-                    placeholder="Nhập username ..."
+                    placeholder="Nhập tên đăng nhập ..."
                 />
             </Form.Item>
 

@@ -85,21 +85,21 @@ namespace back_end.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b2b67bf7-8bae-447b-b293-dd638bea387b",
+                            Id = "de03b0e4-d35e-4312-9c38-e1b125aa4926",
                             ConcurrencyStamp = "1",
                             Name = "ADMIN",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "8088491f-213a-420d-a11e-feb4f2788552",
+                            Id = "ff183039-1c37-4e90-9cf7-be8724dd7544",
                             ConcurrencyStamp = "1",
                             Name = "CUSTOMER",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = "6cc53e84-6847-48da-a787-7a32b7c2cf76",
+                            Id = "c958449b-6abc-48cc-8f13-39a9d4ec9ad5",
                             ConcurrencyStamp = "1",
                             Name = "EMPLOYEE",
                             NormalizedName = "EMPLOYEE"
@@ -125,8 +125,8 @@ namespace back_end.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "aec038d4-4b01-4088-93ac-fc79bed54d8d",
-                            RoleId = "b2b67bf7-8bae-447b-b293-dd638bea387b"
+                            UserId = "6da79932-5ac6-4975-9298-cdd60c15b17e",
+                            RoleId = "de03b0e4-d35e-4312-9c38-e1b125aa4926"
                         });
                 });
 
@@ -746,20 +746,20 @@ namespace back_end.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "aec038d4-4b01-4088-93ac-fc79bed54d8d",
+                            Id = "6da79932-5ac6-4975-9298-cdd60c15b17e",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "8407953d-7070-40ec-966c-dfe1152bed40",
+                            ConcurrencyStamp = "a7237b3c-2a4c-4631-b954-868ac1ecd4bb",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             HoVaTen = "Thanh Nương",
                             LockoutEnabled = false,
-                            NgayTao = new DateTime(2025, 5, 8, 22, 16, 8, 194, DateTimeKind.Local).AddTicks(2655),
+                            NgayTao = new DateTime(2025, 5, 17, 8, 46, 26, 446, DateTimeKind.Local).AddTicks(6514),
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEIc1ShpzvS4TC04B4Edx4IHCKNtRW1wQV905Wad2Oi8qIeDCpjkODwkJi+Vd/S9G7Q==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEFi3neF5YSQnPqnjXb2QOn+1TqINqJJpRzcPW3auUsdeg3/M7MOtlwjLEqsJnET3WA==",
                             PhoneNumber = "0123456789",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "97c6bd48-dbe6-41ae-adc9-1247707fbb09",
+                            SecurityStamp = "690311ec-5933-4985-aeb4-786cfaf95a04",
                             ThoiGianHoatDongGanDay = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             TrangThaiHoatDong = false,
                             TrangThaiKhoa = false,

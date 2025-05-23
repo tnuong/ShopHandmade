@@ -50,7 +50,7 @@ const CartPage: FC = () => {
     const discountAmount = Math.max(originalTotal - discountedTotal, 0);
     
     return <div onScroll={handleScroll} className="h-screen overflow-y-auto bg-slate-50">
-        <HeaderFadeIn fixed={fixed} />
+        {/* <HeaderFadeIn fixed={fixed} /> */}
         <Header />
         <div className="bg-slate-50 md:px-10 px-4">
             <Breadcrumb

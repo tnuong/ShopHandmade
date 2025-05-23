@@ -372,7 +372,7 @@ namespace back_end.Services.Implements
         {
             var productQuantities = await dbContext.ChiTietDonHangs
                 .Include(o => o.BienTheSanPham)
-                    .ThenInclude(o => o.SanPham)
+                        .ThenInclude(o => o.SanPham)
                 .GroupBy(o => o.BienTheSanPham.SanPham)
                 .Select(o => new
                 {
@@ -395,6 +395,7 @@ namespace back_end.Services.Implements
                 var promotionResources = promotions.Select(p => applicationMapper.MapToKhuyenMai(p.KhuyenMai)).ToList();
                 var productResource = applicationMapper.MapToProductResource(productQuantity.Product);
                 productResource.Promotions = promotionResources;
+                productResource.Quantity = await dbContext.BienTheSanPhams.CountAsync(p => p.MaSanPham == productQuantity.Product.MaSanPham);
                 productResource.HasWishlist = await dbContext.DanhSachYeuThichs
                  .Include(s => s.DanhSachSanPham)
                  .AnyAsync(s => s.MaNguoiDung == userId && s.DanhSachSanPham.Any(t => t.MaSanPham == productQuantity.Product.MaSanPham));
@@ -414,6 +415,7 @@ namespace back_end.Services.Implements
         {
             var productQuantities = await dbContext.DanhGiaSanPhams
                 .Include(e => e.SanPham)
+               
                 .GroupBy(e => e.SanPham)
                 .Select(e => new
                 {
@@ -438,6 +440,7 @@ namespace back_end.Services.Implements
                 var promotionResources = promotions.Select(p => applicationMapper.MapToKhuyenMai(p.KhuyenMai)).ToList();
                 var productResource = applicationMapper.MapToProductResource(productQuantity.Product);
                 productResource.Promotions = promotionResources;
+                productResource.Quantity = await dbContext.BienTheSanPhams.CountAsync(p => p.MaSanPham == productQuantity.Product.MaSanPham);
                 productResource.HasWishlist = await dbContext.DanhSachYeuThichs
                  .Include(s => s.DanhSachSanPham)
                  .AnyAsync(s => s.MaNguoiDung == userId && s.DanhSachSanPham.Any(t => t.MaSanPham == productQuantity.Product.MaSanPham));
